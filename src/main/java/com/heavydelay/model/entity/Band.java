@@ -21,39 +21,17 @@ import lombok.ToString;
 @ToString
 @Builder
 @Entity
-@Table(name="users")
-public class User implements Serializable{
+@Table(name="bands")
+public class Band implements Serializable{
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-
-    @Id
-    @Column(name="id_user")
-    private Integer idUser;
     
-    @Column(name="name")
-    private String name;
-
-    @Column(name="lastname")
-    private String lastname;
-
-    @Column(name="username")
-    private String username;
-
-    @Column(name="email")
-    private String email;
-
-    @Column(name="password")
-    private String password;
-
-    @Column(name="create_date")
-    private Timestamp createDate;
-
-    @Column(name="is_admin")
-    private boolean isAdmin;
-
-    @Column(name="id_role")
-    private Integer idRole;
-
+    @Id
     @Column(name="id_band")
     private Integer idBand;
-    
+    @Column(name="band_name")
+    private String bandName;
+    @Column(name="create_date")
+    private Timestamp createDate;
+    @Column(name="access_code")
+    private String accessCode;
 }
