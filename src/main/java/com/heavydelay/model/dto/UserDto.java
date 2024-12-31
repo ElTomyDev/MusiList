@@ -1,7 +1,7 @@
 package com.heavydelay.model.dto;
 
 import java.io.Serializable;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +22,12 @@ public class UserDto implements Serializable{
     private boolean isAdmin;
     private Integer idRole;
     private Integer idBand;
+
+    public boolean getIsAdmin(){
+        return this.isAdmin;
+    }
+
+    public void getIsAdmin(boolean admin){
+        this.isAdmin = admin;
+    }
 }

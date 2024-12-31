@@ -56,4 +56,11 @@ public class User implements Serializable{
     @Column(name="id_band")
     private Integer idBand;
     
+    public boolean getIsAdmin(){
+        return this.isAdmin;
+    }
+
+    public void getIsAdmin(boolean admin){
+        this.isAdmin = admin;
+    }
 }
