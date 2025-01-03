@@ -47,6 +47,6 @@ public class Musician implements Serializable{
     private Role idRole;
 
     @Column(name="join_date")
-    private LocalDateTime joinDate = LocalDateTime.now();
+    private LocalDateTime joinDate;
 
 }

@@ -11,5 +11,6 @@ import lombok.ToString;
 @Builder
 public class MessageResponse implements Serializable{
     private String message;
+    private String reason;
     private Object object;
 }

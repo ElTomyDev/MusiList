@@ -10,5 +10,5 @@ public interface IUser {
     User findById(Integer id);
     void delete(User user);
     boolean existsById(Integer id);
-    List<User> listAll();
+    List<User> getAll();
 }

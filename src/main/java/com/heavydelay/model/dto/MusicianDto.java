@@ -21,6 +21,6 @@ public class MusicianDto implements Serializable{
     private Band idBand;
     private Byte isAdmin;
     private Role idRole;
-    private LocalDateTime joinDate = LocalDateTime.now();
+    private LocalDateTime joinDate;
 
 }

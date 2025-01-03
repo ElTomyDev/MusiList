@@ -34,7 +34,7 @@ public class BandImplService implements IBand{
 
     @Override
     public List<Band> listAll() {
-        return (List) bandDao.findAll();
+        return (List<Band>) bandDao.findAll();
     }
 
     @Override

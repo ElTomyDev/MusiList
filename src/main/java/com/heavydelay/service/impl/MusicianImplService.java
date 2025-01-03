@@ -33,7 +33,7 @@ public class MusicianImplService implements IMusician{
 
     @Override
     public List<Musician> listAll() {
-        return (List) musicianDao.findAll();
+        return (List<Musician>) musicianDao.findAll();
     }
 
     @Override

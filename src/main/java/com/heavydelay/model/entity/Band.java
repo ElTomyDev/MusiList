@@ -1,7 +1,6 @@
 package com.heavydelay.model.entity;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -37,10 +36,10 @@ public class Band implements Serializable{
 
     @ManyToOne
     @JoinColumn(name="id_gender")
-    private Integer idGender;
+    private Gender idGender;
 
     @Column(name="create_date")
-    private LocalDateTime createDate = LocalDateTime.now();
+    private LocalDateTime createDate;
 
     @Column(name="access_code")
     private String accessCode;

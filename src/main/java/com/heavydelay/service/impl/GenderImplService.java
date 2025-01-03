@@ -33,7 +33,7 @@ public class GenderImplService implements IGender{
 
     @Override
     public List<Gender> listAll() {
-        return (List) genderDao.findAll();
+        return (List<Gender>) genderDao.findAll();
     }
 
     @Override

@@ -35,7 +35,7 @@ public class RoleImplService implements IRole{
 
     @Override
     public List<Role> listAll() {
-        return (List) roleDao.findAll();
+        return (List<Role>) roleDao.findAll();
     }
 
     @Override

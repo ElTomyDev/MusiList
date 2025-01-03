@@ -3,6 +3,8 @@ package com.heavydelay.model.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.heavydelay.model.entity.Gender;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
@@ -13,7 +15,7 @@ import lombok.ToString;
 public class BandDto implements Serializable{
     private Integer idBand;
     private String bandName;
-    private Integer idGender;
-    private LocalDateTime createDate = LocalDateTime.now();
+    private Gender idGender;
+    private LocalDateTime createDate;
     private String accessCode;
 }

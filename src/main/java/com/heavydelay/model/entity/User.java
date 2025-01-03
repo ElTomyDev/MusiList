@@ -53,9 +53,9 @@ public class User implements Serializable{
 
     @Enumerated(EnumType.STRING)
     @Column(name="status")
-    private UserStatus status = UserStatus.ACTIVE;
+    private UserStatus status;
 
     @Column(name="create_date")
-    private LocalDateTime createDate = LocalDateTime.now();
+    private LocalDateTime createDate;
 
 }

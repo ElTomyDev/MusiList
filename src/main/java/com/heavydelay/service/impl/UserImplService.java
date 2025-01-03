@@ -34,12 +34,12 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public List<User> listAll() {
-        return (List) userDao.findAll();
+    public List<User> getAll() {
+        return (List<User>) userDao.findAll();
     }
 
     @Override
-    public User save(UserDto userDto) {
+    public User save(UserDto userDto){
         User user = User.builder()
                     .idUser(userDto.getIdUser())
                     .name(userDto.getName())
@@ -50,8 +50,7 @@ public class UserImplService implements IUser{
                     .password(userDto.getPassword())
                     .status(userDto.getStatus())
                     .createDate(userDto.getCreateDate())
-                    .build()
+                    .build();
         return userDao.save(user);
     }
-
 }
