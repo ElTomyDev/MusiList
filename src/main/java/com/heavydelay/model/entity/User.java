@@ -1,10 +1,14 @@
 package com.heavydelay.model.entity;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+import com.heavydelay.enums.UserStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,26 +45,17 @@ public class User implements Serializable{
     @Column(name="email")
     private String email;
 
+    @Column(name="description")
+    private String description;
+
     @Column(name="password")
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="status")
+    private UserStatus status = UserStatus.ACTIVE;
+
     @Column(name="create_date")
-    private Timestamp createDate;
+    private LocalDateTime createDate = LocalDateTime.now();
 
-    @Column(name="is_admin")
-    private boolean isAdmin;
-
-    @Column(name="id_role")
-    private Integer idRole;
-
-    @Column(name="id_band")
-    private Integer idBand;
-    
-    public boolean getIsAdmin(){
-        return this.isAdmin;
-    }
-
-    public void getIsAdmin(boolean admin){
-        this.isAdmin = admin;
-    }
 }

@@ -46,11 +46,11 @@ public class UserImplService implements IUser{
                     .lastname(userDto.getLastname())
                     .username(userDto.getUsername())
                     .email(userDto.getEmail())
+                    .description(userDto.getDescription())
                     .password(userDto.getPassword())
+                    .status(userDto.getStatus())
                     .createDate(userDto.getCreateDate())
-                    .isAdmin(userDto.getIsAdmin())
-                    .idRole(userDto.getIdRole())
-                    .idBand(userDto.getIdBand()).build();
+                    .build()
         return userDao.save(user);
     }
 

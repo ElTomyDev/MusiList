@@ -42,6 +42,7 @@ public class BandImplService implements IBand{
         Band band = Band.builder()
                     .idBand(bandDto.getIdBand())
                     .bandName(bandDto.getBandName())
+                    .idGender(bandDto.getIdGender())
                     .createDate(bandDto.getCreateDate())
                     .accessCode(bandDto.getAccessCode())
                     .build();

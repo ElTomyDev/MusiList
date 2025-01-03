@@ -1,7 +1,9 @@
 package com.heavydelay.model.dto;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+import com.heavydelay.enums.UserStatus;
 
 import lombok.Builder;
 import lombok.Data;
@@ -17,17 +19,9 @@ public class UserDto implements Serializable{
     private String lastname;
     private String username;
     private String email;
+    private String description;
     private String password;
-    private Timestamp createDate;
-    private boolean isAdmin;
-    private Integer idRole;
-    private Integer idBand;
+    private UserStatus status = UserStatus.ACTIVE;
+    private LocalDateTime createDate = LocalDateTime.now();
 
-    public boolean getIsAdmin(){
-        return this.isAdmin;
-    }
-
-    public void getIsAdmin(boolean admin){
-        this.isAdmin = admin;
-    }
 }
