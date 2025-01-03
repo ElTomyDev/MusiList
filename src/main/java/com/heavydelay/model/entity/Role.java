@@ -22,9 +22,9 @@ import lombok.ToString;
 @Entity
 @Table(name="roles")
 public class Role implements Serializable{
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
     
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_role")
     private Integer idRole;
 

@@ -27,9 +27,9 @@ import lombok.ToString;
 @Entity
 @Table(name="users")
 public class User implements Serializable{
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-
+    
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_user")
     private Integer idUser;
     
