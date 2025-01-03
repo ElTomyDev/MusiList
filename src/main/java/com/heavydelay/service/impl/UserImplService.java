@@ -34,7 +34,7 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> listAll() {
         return (List<User>) userDao.findAll();
     }
 
