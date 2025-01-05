@@ -7,8 +7,8 @@ import com.heavydelay.model.entity.User;
 
 public interface IUser {
     User save(UserDto userDto);
-    User findById(Integer id);
-    void delete(User user);
+    UserDto showById(Integer id);
+    void deleteById(Integer id);
     boolean existsById(Integer id);
-    List<User> listAll();
+    List<User> showAll();
 }

@@ -26,7 +26,7 @@ public class UserController {
     private IUser userService;
 
     @GetMapping("/users")
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<?> showAllUsers(){
         List<User> users = userService.listAll();
         if(users.isEmpty()){
             return new ResponseEntity<>(
