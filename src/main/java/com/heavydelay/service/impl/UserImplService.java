@@ -52,7 +52,7 @@ public class UserImplService implements IUser{
     public List<User> showAll() {
         try{
             List<User> users = (List) userDao.findAll();
-            if(users !=null && !users.isEmpty()){
+            if(users != null && !users.isEmpty()){
                 return users;
             }
             return Collections.emptyList();
@@ -62,8 +62,28 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public User save(UserDto userDto){
+    public UserDto create(UserDto userDto){
         User user = userMapper.toEntity(userDto);
-        return userDao.save(user);
+        user.setIdUser(null);
+
+        User createdUser = userDao.save(user);
+
+        return userMapper.toDto(createdUser);
+    }
+
+    @Override
+    public UserDto update(UserDto userDto){
+
+        if (userDto.getIdUser() == null){
+            throw new IllegalArgumentException("ID cannot be null to update a user.");
+        }
+
+        User user = userDao.findById(userDto.getIdUser())
+                .orElseThrow(() -> new EntityNotFoundException("User with ID " + userDto.getIdUser() + " not found"));
+    
+        userDao.save(user);
+
+        return userMapper.toDto(user);
+
     }
 }
