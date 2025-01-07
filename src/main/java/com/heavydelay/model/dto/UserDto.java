@@ -7,6 +7,7 @@ import com.heavydelay.enums.UserStatus;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -20,11 +21,11 @@ public class UserDto implements Serializable{
 
     private Integer idUser;
 
-    @NotBlank(message = "'name' cannot be empty")
+    @NotEmpty(message = "'name' cannot be empty")
     @Size(min = 2, max = 50, message = "The 'name' must be between 2 and 50 characters long")
     private String name;
 
-    @NotBlank(message = "The 'lastname' cannot be empty")
+    @NotEmpty(message = "The 'lastname' cannot be empty")
     @Size(min = 2, max = 50, message = "The 'lastname' must be between 2 and 50 characters long")
     private String lastname;
 
@@ -45,7 +46,8 @@ public class UserDto implements Serializable{
 
     @NotNull(message = "User 'status' is required")
     private UserStatus status;
-    
+
     private LocalDateTime createDate;
 
+    
 }
