@@ -82,13 +82,23 @@ public class UserImplService implements IUser{
         if (userDto.getIdUser() == null){
             throw new IllegalArgumentException("ID cannot be null to update a user.");
         }
-
         User user = userDao.findById(userDto.getIdUser())
                 .orElseThrow(() -> new EntityNotFoundException("User with ID " + userDto.getIdUser() + " not found"));
-    
-        userDao.save(user);
+        User userUpdate = User.builder()
+                        .idUser(user.getIdUser())
+                        .name(userDto.getName())
+                        .lastname(userDto.getLastname())
+                        .username(userDto.getUsername())
+                        .email(userDto.getEmail())
+                        .description(userDto.getDescription())
+                        .password(userDto.getPassword())
+                        .status(userDto.getStatus())
+                        .createDate(user.getCreateDate())
+                        .build();
+        
+        userDao.save(userUpdate);
 
-        return userMapper.toDto(user);
+        return userMapper.toDto(userUpdate);
 
     }
 }

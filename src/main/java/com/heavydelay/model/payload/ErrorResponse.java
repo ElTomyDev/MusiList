@@ -1,6 +1,7 @@
 package com.heavydelay.model.payload;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,5 @@ public class ErrorResponse {
     private String error;
     private String message;
     private String path;
+    private List<String> details;
 }
