@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.heavydelay.exception.ResourceNotFoundException;
 import com.heavydelay.model.dto.UserDto;
 import com.heavydelay.model.payload.MessageResponse;
 import com.heavydelay.service.IUser;
@@ -36,7 +37,7 @@ public class UserController {
                 MessageResponse.builder()
                 .message("No records found.")
                 .object(users)
-                .build(), HttpStatus.NOT_FOUND
+                .build(), HttpStatus.OK
             );
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -45,13 +46,7 @@ public class UserController {
     @GetMapping("/user/{id})")
     public ResponseEntity<?> showUserById(@PathVariable Integer id) {
         if(!userService.existsById(id)){
-            return new ResponseEntity<>(
-                MessageResponse.builder()
-                .message("The record you are trying to search for does not exist.")
-                .reason("The ID "+ id + " does not exist")
-                .object(null)
-                .build(), HttpStatus.NOT_FOUND
-            );
+            throw new ResourceNotFoundException("The user with ID '" + id + "' was not found");
         }
         UserDto user = userService.showById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
