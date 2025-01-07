@@ -2,8 +2,8 @@ package com.heavydelay.service.impl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,11 +49,16 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public List<User> showAll() {
+    public List<UserDto> showAll() {
         try{
-            List<User> users = (List) userDao.findAll();
-            if(users != null && !users.isEmpty()){
-                return users;
+            List<User> users = (List<User>) userDao.findAll();
+
+            List<UserDto> usersDtos= users.stream()
+                                    .map(userMapper::toDto)
+                                    .collect(Collectors.toList());
+
+            if(usersDtos != null && !usersDtos.isEmpty()){
+                return usersDtos;
             }
             return Collections.emptyList();
         } catch(Exception e){

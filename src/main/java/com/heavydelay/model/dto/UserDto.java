@@ -8,7 +8,6 @@ import com.heavydelay.enums.UserStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,6 @@ import lombok.ToString;
 @Builder
 public class UserDto implements Serializable{
 
-    @NotNull(message = "The ID must be null when creating a user")
     private Integer idUser;
 
     @NotBlank(message = "Name cannot be empty")
@@ -48,7 +46,6 @@ public class UserDto implements Serializable{
     @NotNull(message = "User status is required")
     private UserStatus status;
 
-    @PastOrPresent(message = "The creation date cannot be in the future")
     private LocalDateTime createDate;
 
 }
