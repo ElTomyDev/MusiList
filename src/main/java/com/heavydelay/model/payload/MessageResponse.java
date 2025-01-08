@@ -12,5 +12,5 @@ import lombok.ToString;
 public class MessageResponse implements Serializable{
     private String message;
     private Integer status;
-    private Object object;
+    private Object objectResponse;
 }

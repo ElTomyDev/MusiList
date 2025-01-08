@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.heavydelay.exception.ResourceNotFoundException;
 import com.heavydelay.model.dto.UserDto;
+import com.heavydelay.model.dto.validation.ValidationUserDto;
 import com.heavydelay.model.entity.User;
 import com.heavydelay.model.mapper.UserMapper;
 import com.heavydelay.repository.UserRepository;
@@ -47,18 +48,7 @@ public class UserImplService implements IUser{
         User user = userRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );
-        return userMapper.toDto(
-            User.builder()
-            .idUser(user.getIdUser())
-            .name(user.getName())
-            .lastname(user.getLastname())
-            .username(user.getUsername())
-            .email(user.getEmail())
-            .description(user.getDescription())
-            .status(user.getStatus())
-            .createDate(user.getCreateDate())
-            .build()
-        );
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -66,7 +56,7 @@ public class UserImplService implements IUser{
         try{
             List<User> users = (List<User>) userRepository.findAll();
 
-            List<UserDto> usersDtos= users.stream()
+            List<UserDto> usersDtos = users.stream()
                                     .map(userMapper::toDto)
                                     .collect(Collectors.toList());
 
@@ -80,8 +70,8 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public UserDto createNewUser(UserDto userDto){
-        User user = userMapper.toEntity(userDto);
+    public UserDto createNewUser(ValidationUserDto validUserDto){
+        User user = userMapper.toEntity(validUserDto);
         user.setIdUser(null);
 
         User createdUser = userRepository.save(user);
@@ -90,39 +80,29 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public UserDto updateUser(UserDto userDto){
+    public UserDto updateUser(ValidationUserDto validUserDto){
 
-        if (userDto.getIdUser() == null){
+        if (validUserDto.getIdUser() == null){
             throw new IllegalArgumentException("ID cannot be null to update a user.");
         }
-        User user = userRepository.findById(userDto.getIdUser())
-            .orElseThrow(() -> new ResourceNotFoundException("The user with ID '" + userDto.getIdUser() + "' was not found")
+        User user = userRepository.findById(validUserDto.getIdUser())
+            .orElseThrow(() -> new ResourceNotFoundException("The user with ID '" + validUserDto.getIdUser() + "' was not found")
         );
         User userUpdate = User.builder()
-                        .idUser(user.getIdUser())
-                        .name(userDto.getName())
-                        .lastname(userDto.getLastname())
-                        .username(userDto.getUsername())
-                        .email(user.getEmail())
-                        .description(userDto.getDescription())
-                        .password(user.getPassword())
-                        .status(user.getStatus())
-                        .createDate(user.getCreateDate())
+                        .idUser(user.getIdUser()) // queda igual
+                        .name(validUserDto.getName())
+                        .lastname(validUserDto.getLastname())
+                        .username(validUserDto.getUsername())
+                        .email(user.getEmail()) // queda igual
+                        .description(validUserDto.getDescription())
+                        .password(user.getPassword()) // queda igual
+                        .status(user.getStatus()) // queda igual
+                        .createDate(user.getCreateDate()) // queda igual
                         .build();
         
         // Actualizo el usuario y lo devuelvo con datos filtrados
         userRepository.save(userUpdate);
-        return userMapper.toDto(
-            User.builder()
-            .idUser(userUpdate.getIdUser())
-            .name(userUpdate.getName())
-            .lastname(userUpdate.getLastname())
-            .username(userUpdate.getUsername())
-            .description(userUpdate.getDescription())
-            .status(userUpdate.getStatus())
-            .createDate(userUpdate.getCreateDate())
-            .build()
-        );
+        return userMapper.toDto(userUpdate);
 
     }
 }

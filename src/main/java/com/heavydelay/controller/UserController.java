@@ -1,5 +1,7 @@
 package com.heavydelay.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.heavydelay.model.dto.UserDto;
+import com.heavydelay.model.dto.validation.ValidationUserDto;
 import com.heavydelay.model.payload.MessageResponse;
 import com.heavydelay.service.IUser;
 
@@ -26,34 +29,48 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<?> showAllUsers(){
-        return new ResponseEntity<>(userService.showAllUsers(), HttpStatus.OK);
+        List<UserDto> users = userService.showAllUsers();
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("Users successfully obtained")
+            .status(HttpStatus.OK.value())
+            .objectResponse(users)
+            .build(), HttpStatus.OK
+        );
     }
 
-    @GetMapping("/user/{id})")
+    @GetMapping("/user/{id}")
     public ResponseEntity<?> showUserById(@PathVariable Integer id) {
-        return new ResponseEntity<>(userService.showUserById(id), HttpStatus.OK);
+        UserDto user = userService.showUserById(id);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User successfully obtained.")
+            .status(HttpStatus.OK.value())
+            .objectResponse(user)
+            .build(), HttpStatus.OK
+        );
     }
     
     @PostMapping("/user")
-    public ResponseEntity<?> createNewUser(@RequestBody @Valid UserDto userDto) {
-        UserDto userCreate = userService.createNewUser(userDto);
+    public ResponseEntity<?> createNewUser(@RequestBody @Valid ValidationUserDto validUserDto) {
+        UserDto userCreate = userService.createNewUser(validUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
-            .message("Successfully saved.")
+            .message("User created successfully")
             .status(HttpStatus.CREATED.value())
-            .object(userCreate)
+            .objectResponse(userCreate)
             .build(), HttpStatus.CREATED
         );
     }
 
     @PutMapping("/user")
-    public ResponseEntity<?> updateUser(@RequestBody @Valid UserDto userDto){
-        UserDto updateUser = userService.updateUser(userDto);
+    public ResponseEntity<?> updateUser(@RequestBody @Valid ValidationUserDto validUserDto){
+        UserDto updateUser = userService.updateUser(validUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User successfully updated.")
-            .object(updateUser)
             .status(HttpStatus.CREATED.value())
+            .objectResponse(updateUser)
             .build(), HttpStatus.CREATED
         );
     }
