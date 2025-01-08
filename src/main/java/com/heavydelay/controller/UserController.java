@@ -1,7 +1,5 @@
 package com.heavydelay.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.heavydelay.exception.ResourceNotFoundException;
 import com.heavydelay.model.dto.UserDto;
 import com.heavydelay.model.payload.MessageResponse;
 import com.heavydelay.service.IUser;
@@ -29,33 +26,21 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<?> showAllUsers(){
-        List<UserDto> users = userService.showAll();
-        if(users.isEmpty()){
-            return new ResponseEntity<>(
-                MessageResponse.builder()
-                .message("No records found.")
-                .object(users)
-                .build(), HttpStatus.OK
-            );
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(userService.showAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/user/{id})")
     public ResponseEntity<?> showUserById(@PathVariable Integer id) {
-        if(!userService.existsById(id)){
-            throw new ResourceNotFoundException("The user with ID '" + id + "' was not found");
-        }
-        UserDto user = userService.showById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(userService.showUserById(id), HttpStatus.OK);
     }
     
     @PostMapping("/user")
     public ResponseEntity<?> createNewUser(@RequestBody @Valid UserDto userDto) {
-        UserDto userCreate = userService.create(userDto);
+        UserDto userCreate = userService.createNewUser(userDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("Successfully saved.")
+            .status(HttpStatus.CREATED.value())
             .object(userCreate)
             .build(), HttpStatus.CREATED
         );
@@ -63,18 +48,13 @@ public class UserController {
 
     @PutMapping("/user")
     public ResponseEntity<?> updateUser(@RequestBody @Valid UserDto userDto){
-            
-        if(!userService.existsById(userDto.getIdUser())){
-            throw new ResourceNotFoundException("The user with ID '" + userDto.getIdUser() + "' was not found");
-        }
-        
-        UserDto updateUser = userService.update(userDto);
+        UserDto updateUser = userService.updateUser(userDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User successfully updated.")
             .object(updateUser)
+            .status(HttpStatus.CREATED.value())
             .build(), HttpStatus.CREATED
         );
-
     }
 }
