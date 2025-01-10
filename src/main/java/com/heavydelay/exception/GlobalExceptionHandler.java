@@ -8,15 +8,56 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.heavydelay.model.payload.ErrorResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MissingServletRequestParameterException ex, WebRequest request){
+        return new ResponseEntity<>(
+            ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .status(HttpStatus.BAD_REQUEST.value())
+            .error("Missing Parameter")
+            .message("Required parameter '" + ex.getMessage() + "' is missing")
+            .path(request.getDescription(false))
+            .build(), HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex, WebRequest request){
+        return new ResponseEntity<>(
+            ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .status(HttpStatus.BAD_REQUEST.value())
+            .error("Type Mismatch Error")
+            .message("Invalid type providad for parameter: " + ex.getMessage())
+            .path(request.getDescription(false))
+            .build(), HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex , WebRequest request){
+        return new ResponseEntity<>(
+            ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .status(HttpStatus.METHOD_NOT_ALLOWED.value())
+            .error("Method Not Allowed")
+            .message("The HTTP method" + ex.getMessage() + "is not supported for this endpoint.")
+            .path(request.getDescription(false))
+            .build(), HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex, WebRequest request){
