@@ -6,7 +6,7 @@ import com.heavydelay.model.dto.UserDto;
 import com.heavydelay.model.dto.validation.ValidationUserDto;
 
 public interface IUser {
-    UserDto createNewUser(ValidationUserDto userDto);
+    UserDto registerNewUser(ValidationUserDto userDto);
     UserDto updateUser(ValidationUserDto userDto);
     UserDto showUserById(Integer id);
     void deleteUserById(Integer id);

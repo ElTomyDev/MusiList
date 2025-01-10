@@ -70,7 +70,7 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public UserDto createNewUser(ValidationUserDto validUserDto){
+    public UserDto registerNewUser(ValidationUserDto validUserDto){
         User user = userMapper.toEntity(validUserDto);
         user.setIdUser(null);
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.heavydelay.model.dto.UserDto;
@@ -22,6 +23,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
     
     @Autowired
@@ -51,9 +53,9 @@ public class UserController {
         );
     }
     
-    @PostMapping("/user")
-    public ResponseEntity<?> createNewUser(@RequestBody @Valid ValidationUserDto validUserDto) {
-        UserDto userCreate = userService.createNewUser(validUserDto);
+    @PostMapping("/register")
+    public ResponseEntity<?> registerNewUser(@RequestBody @Valid ValidationUserDto validUserDto) {
+        UserDto userCreate = userService.registerNewUser(validUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User created successfully")
@@ -63,8 +65,8 @@ public class UserController {
         );
     }
 
-    @PutMapping("/user")
-    public ResponseEntity<?> updateUser(@RequestBody @Valid ValidationUserDto validUserDto){
+    @PutMapping("/")
+    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody @Valid ValidationUserDto validUserDto){
         UserDto updateUser = userService.updateUser(validUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
