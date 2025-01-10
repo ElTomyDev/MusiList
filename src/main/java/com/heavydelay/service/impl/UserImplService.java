@@ -106,7 +106,7 @@ public class UserImplService implements IUser{
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );
-        if(passwordUserDto.getOldPasword() != user.getPassword()){
+        if(!passwordUserDto.getOldPasword().equals(user.getPassword())){
             throw new IllegalArgumentException("Old password is incorrect!");
         }
 

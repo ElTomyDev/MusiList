@@ -65,7 +65,7 @@ public class UserController {
         );
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/user/{id}/update-details")
     public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody @Valid UpdateUserDto updateUserDto){
         UserDto updateUser = userService.changeUserValues(id, updateUserDto);
         return new ResponseEntity<>(
@@ -77,7 +77,7 @@ public class UserController {
         );
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/user/{id}/update-password")
     public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody @Valid PasswordUserDto passwordUserDto){
         PasswordUserDto updateUser = userService.changeUserPassword(id, passwordUserDto);
         return new ResponseEntity<>(
