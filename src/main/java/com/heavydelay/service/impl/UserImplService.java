@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.heavydelay.exception.ResourceNotFoundException;
-import com.heavydelay.model.dto.UserDto;
-import com.heavydelay.model.dto.validation.ValidationUserDto;
+import com.heavydelay.model.dto.user.PasswordUserDto;
+import com.heavydelay.model.dto.user.RegisterUserDto;
+import com.heavydelay.model.dto.user.UpdateUserDto;
+import com.heavydelay.model.dto.user.UserDto;
 import com.heavydelay.model.entity.User;
 import com.heavydelay.model.mapper.UserMapper;
 import com.heavydelay.repository.UserRepository;
@@ -70,9 +72,8 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public UserDto registerNewUser(ValidationUserDto validUserDto){
-        User user = userMapper.toEntity(validUserDto);
-        user.setIdUser(null);
+    public UserDto registerNewUser(RegisterUserDto registerUserDto){
+        User user = userMapper.toEntity(registerUserDto);
 
         User createdUser = userRepository.save(user);
 
@@ -80,29 +81,39 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public UserDto updateUser(ValidationUserDto validUserDto){
+    public UserDto changeUserValues(Integer id, UpdateUserDto updateUserDto){
 
-        if (validUserDto.getIdUser() == null){
+        if (id == null){
             throw new IllegalArgumentException("ID cannot be null to update a user.");
         }
-        User user = userRepository.findById(validUserDto.getIdUser())
-            .orElseThrow(() -> new ResourceNotFoundException("The user with ID '" + validUserDto.getIdUser() + "' was not found")
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );
-        User userUpdate = User.builder()
-                        .idUser(user.getIdUser()) // queda igual
-                        .name(validUserDto.getName())
-                        .lastname(validUserDto.getLastname())
-                        .username(validUserDto.getUsername())
-                        .email(user.getEmail()) // queda igual
-                        .description(validUserDto.getDescription())
-                        .password(user.getPassword()) // queda igual
-                        .status(user.getStatus()) // queda igual
-                        .createDate(user.getCreateDate()) // queda igual
-                        .build();
+        user.setName(updateUserDto.getName());
+        user.setLastname(updateUserDto.getLastname());
+        user.setUsername(updateUserDto.getUsername());
+        user.setDescription(updateUserDto.getDescription());
         
         // Actualizo el usuario y lo devuelvo con datos filtrados
-        userRepository.save(userUpdate);
-        return userMapper.toDto(userUpdate);
+        userRepository.save(user);
+        return userMapper.toDto(user);
+
+    }
+
+    @Override
+    public PasswordUserDto changeUserPassword(Integer id, PasswordUserDto passwordUserDto){
+
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
+        );
+        if(passwordUserDto.getOldPasword() != user.getPassword()){
+            throw new IllegalArgumentException("Old password is incorrect!");
+        }
+
+        user.setPassword(passwordUserDto.getNewPasword());
+        
+        userRepository.save(user);
+        return passwordUserDto;
 
     }
 }

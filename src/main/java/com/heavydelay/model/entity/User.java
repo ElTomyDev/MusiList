@@ -1,6 +1,5 @@
 package com.heavydelay.model.entity;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.heavydelay.enums.UserStatus;
@@ -26,7 +25,7 @@ import lombok.ToString;
 @Builder
 @Entity
 @Table(name="users")
-public class User implements Serializable{
+public class User{
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -46,16 +45,19 @@ public class User implements Serializable{
     private String email;
 
     @Column(name="description")
-    private String description;
+    @Builder.Default
+    private String description = "";
 
     @Column(name="password")
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(name="status")
-    private UserStatus status;
+    @Builder.Default
+    private UserStatus status = UserStatus.ACTIVE;
 
     @Column(name="create_date")
-    private LocalDateTime createDate;
+    @Builder.Default
+    private LocalDateTime createDate = LocalDateTime.now();
 
 }

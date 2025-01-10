@@ -1,18 +1,24 @@
-package com.heavydelay.model.dto.validation;
+package com.heavydelay.model.dto.user;
+
+import com.heavydelay.validation.ValidPassword;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
 
+@Data
+@ToString(exclude = "password")
+@Builder
 public class RegisterUserDto {
-    private Integer idUser;
 
-    @NotEmpty(message = "'name' cannot be empty")
+    @NotBlank(message = "'name' cannot be empty")
     @Size(min = 2, max = 50, message = "The 'name' must be between 2 and 50 characters long")
     private String name;
 
-    @NotEmpty(message = "The 'lastname' cannot be empty")
+    @NotBlank(message = "The 'lastname' cannot be empty")
     @Size(min = 2, max = 50, message = "The 'lastname' must be between 2 and 50 characters long")
     private String lastname;
 
@@ -25,7 +31,7 @@ public class RegisterUserDto {
     private String email;
 
     @NotBlank(message = "'password' cannot be empty")
-    @Size(min = 6, message = "'password' must be at least 6 characters long")
+    @ValidPassword
     private String password;
 
 }

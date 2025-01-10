@@ -103,4 +103,17 @@ public class GlobalExceptionHandler {
             .build(), HttpStatus.CONFLICT
         );
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+        return new ResponseEntity<>(
+            ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .status(HttpStatus.BAD_REQUEST.value())
+            .error("Illegal Argument")
+            .message("A constraint violation occurred: " + ex.getMessage() )
+            .path(request.getDescription(false))
+            .build(), HttpStatus.BAD_REQUEST
+        );
+    }
 }

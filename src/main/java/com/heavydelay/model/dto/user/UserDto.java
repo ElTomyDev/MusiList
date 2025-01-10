@@ -1,6 +1,5 @@
-package com.heavydelay.model.dto;
+package com.heavydelay.model.dto.user;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.heavydelay.enums.UserStatus;
@@ -12,7 +11,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Builder
-public class UserDto implements Serializable{
+public class UserDto{
 
     private Integer idUser;
     private String name;

@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.heavydelay.model.dto.UserDto;
-import com.heavydelay.model.dto.validation.ValidationUserDto;
+import com.heavydelay.model.dto.user.PasswordUserDto;
+import com.heavydelay.model.dto.user.RegisterUserDto;
+import com.heavydelay.model.dto.user.UpdateUserDto;
+import com.heavydelay.model.dto.user.UserDto;
 import com.heavydelay.model.payload.MessageResponse;
 import com.heavydelay.service.IUser;
 
@@ -23,7 +24,6 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("/users")
 public class UserController {
     
     @Autowired
@@ -54,8 +54,8 @@ public class UserController {
     }
     
     @PostMapping("/register")
-    public ResponseEntity<?> registerNewUser(@RequestBody @Valid ValidationUserDto validUserDto) {
-        UserDto userCreate = userService.registerNewUser(validUserDto);
+    public ResponseEntity<?> registerNewUser(@RequestBody @Valid RegisterUserDto registerUserDto) {
+        UserDto userCreate = userService.registerNewUser(registerUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User created successfully")
@@ -65,12 +65,24 @@ public class UserController {
         );
     }
 
-    @PutMapping("/")
-    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody @Valid ValidationUserDto validUserDto){
-        UserDto updateUser = userService.updateUser(validUserDto);
+    @PutMapping("/user/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody @Valid UpdateUserDto updateUserDto){
+        UserDto updateUser = userService.changeUserValues(id, updateUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User successfully updated.")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(updateUser)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/user/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody @Valid PasswordUserDto passwordUserDto){
+        PasswordUserDto updateUser = userService.changeUserPassword(id, passwordUserDto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User password changed successfully.")
             .status(HttpStatus.CREATED.value())
             .objectResponse(updateUser)
             .build(), HttpStatus.CREATED
