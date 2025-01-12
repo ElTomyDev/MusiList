@@ -2,18 +2,21 @@ package com.heavydelay.service;
 
 import java.util.List;
 
+import com.heavydelay.model.dto.user.LoginUserDto;
 import com.heavydelay.model.dto.user.PasswordUserDto;
+import com.heavydelay.model.dto.user.PublicUserDto;
 import com.heavydelay.model.dto.user.RegisterUserDto;
 import com.heavydelay.model.dto.user.UpdateUserDto;
-import com.heavydelay.model.dto.user.UserDto;
 
 public interface IUser {
-    UserDto loginUser()
-    UserDto registerNewUser(RegisterUserDto userDto);
-    UserDto changeUserValues(Integer id, UpdateUserDto userDto);
+    PublicUserDto loginUser(LoginUserDto loginUserDto);
+    PublicUserDto registerNewUser(RegisterUserDto userDto);
+    PublicUserDto changeUserValues(Integer id, UpdateUserDto userDto);
     PasswordUserDto changeUserPassword(Integer id, PasswordUserDto passwordUserDto);
-    UserDto showUserById(Integer id);
+    PublicUserDto showUserById(Integer id);
+    PublicUserDto showUserByEmail(String email);
     void deleteUserById(Integer id);
     boolean existsUserById(Integer id);
-    List<UserDto> showAllUsers();
+    boolean checkPassword(String rawPassword, String hashedPassword);
+    List<PublicUserDto> showAllUsers();
 }

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.heavydelay.model.dto.user.PasswordUserDto;
+import com.heavydelay.model.dto.user.PublicUserDto;
 import com.heavydelay.model.dto.user.RegisterUserDto;
 import com.heavydelay.model.dto.user.UpdateUserDto;
-import com.heavydelay.model.dto.user.UserDto;
 import com.heavydelay.model.payload.MessageResponse;
 import com.heavydelay.service.IUser;
 
@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<?> showAllUsers(){
-        List<UserDto> users = userService.showAllUsers();
+        List<PublicUserDto> users = userService.showAllUsers();
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("Users successfully obtained")
@@ -43,7 +43,7 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> showUserById(@PathVariable Integer id) {
-        UserDto user = userService.showUserById(id);
+        PublicUserDto user = userService.showUserById(id);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User successfully obtained.")
@@ -55,7 +55,7 @@ public class UserController {
     
     @PostMapping("/register")
     public ResponseEntity<?> registerNewUser(@RequestBody @Valid RegisterUserDto registerUserDto) {
-        UserDto userCreate = userService.registerNewUser(registerUserDto);
+        PublicUserDto userCreate = userService.registerNewUser(registerUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User created successfully")
@@ -67,7 +67,7 @@ public class UserController {
 
     @PutMapping("/user/{id}/update-details")
     public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody @Valid UpdateUserDto updateUserDto){
-        UserDto updateUser = userService.changeUserValues(id, updateUserDto);
+        PublicUserDto updateUser = userService.changeUserValues(id, updateUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User successfully updated.")

@@ -56,6 +56,9 @@ public class User{
     @Builder.Default
     private UserStatus status = UserStatus.ACTIVE;
 
+    @Column(name = "last_connection")
+    private LocalDateTime lastConnection;
+
     @Column(name="create_date")
     @Builder.Default
     private LocalDateTime createDate = LocalDateTime.now();

@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Builder
-public class UserDto{
+public class PublicUserDto{
 
     private Integer idUser;
     private String name;
@@ -19,5 +19,6 @@ public class UserDto{
     private String username;
     private String description;
     private UserStatus status;
+    private LocalDateTime lastConnection;
     private LocalDateTime createDate;
 }

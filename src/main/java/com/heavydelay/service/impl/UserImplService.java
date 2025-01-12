@@ -1,18 +1,22 @@
 package com.heavydelay.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.heavydelay.exception.ResourceNotFoundException;
+import com.heavydelay.model.dto.user.LoginUserDto;
 import com.heavydelay.model.dto.user.PasswordUserDto;
+import com.heavydelay.model.dto.user.PublicUserDto;
 import com.heavydelay.model.dto.user.RegisterUserDto;
 import com.heavydelay.model.dto.user.UpdateUserDto;
-import com.heavydelay.model.dto.user.UserDto;
 import com.heavydelay.model.entity.User;
 import com.heavydelay.model.mapper.UserMapper;
 import com.heavydelay.repository.UserRepository;
@@ -25,6 +29,7 @@ public class UserImplService implements IUser{
 
     private UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public UserImplService(UserRepository userRepository, UserMapper userMapper){
         this.userRepository = userRepository;
@@ -46,19 +51,34 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public UserDto showUserById(Integer id) {
+    public boolean checkPassword(String rawPassword, String hashedPassword){
+        return passwordEncoder.matches(rawPassword, hashedPassword);
+    }
+
+    @Override
+    public PublicUserDto showUserById(Integer id) {
         User user = userRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );
         return userMapper.toDto(user);
     }
 
+    @Override 
+    public PublicUserDto showUserByEmail(String email){
+        for (User u : userRepository.findAll()){
+            if(u.getEmail().equalsIgnoreCase(email)){
+                return userMapper.toDto(u);
+            }
+        }
+        throw new ResourceNotFoundException("The user with Email '" + email + "' was not found");
+    }
+
     @Override
-    public List<UserDto> showAllUsers() {
+    public List<PublicUserDto> showAllUsers() {
         try{
             List<User> users = (List<User>) userRepository.findAll();
 
-            List<UserDto> usersDtos = users.stream()
+            List<PublicUserDto> usersDtos = users.stream()
                                     .map(userMapper::toDto)
                                     .collect(Collectors.toList());
 
@@ -72,16 +92,25 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public UserDto registerNewUser(RegisterUserDto registerUserDto){
+    public PublicUserDto loginUser(LoginUserDto loginUserDto){
+        User user = userMapper.toEntity(this.showUserByEmail(loginUserDto.getEmail()));
+        if (user != null && this.checkPassword(user.getPassword(), loginUserDto.getPassword())){
+            user.setLastConnection(LocalDateTime.now());
+            userRepository.save(user);
+        }
+        return userMapper.toDto(user);
+    }
+
+    @Override
+    public PublicUserDto registerNewUser(RegisterUserDto registerUserDto){
 
         User createdUser = userRepository.save(userMapper.toEntity(registerUserDto));
 
         return userMapper.toDto(createdUser);
     }
-    
 
     @Override
-    public UserDto changeUserValues(Integer id, UpdateUserDto updateUserDto){
+    public PublicUserDto changeUserValues(Integer id, UpdateUserDto updateUserDto){
 
         if (id == null){
             throw new IllegalArgumentException("ID cannot be null to update a user.");
