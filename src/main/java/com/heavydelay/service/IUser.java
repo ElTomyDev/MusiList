@@ -2,6 +2,7 @@ package com.heavydelay.service;
 
 import java.util.List;
 
+import com.heavydelay.model.dto.user.EmailUserDto;
 import com.heavydelay.model.dto.user.LoginUserDto;
 import com.heavydelay.model.dto.user.PasswordUserDto;
 import com.heavydelay.model.dto.user.PublicUserDto;
@@ -13,8 +14,8 @@ public interface IUser {
     PublicUserDto registerNewUser(RegisterUserDto userDto);
     PublicUserDto changeUserValues(Integer id, UpdateUserDto userDto);
     PasswordUserDto changeUserPassword(Integer id, PasswordUserDto passwordUserDto);
+    EmailUserDto changeUserEmail(EmailUserDto newEmail);
     PublicUserDto showUserById(Integer id);
-    PublicUserDto showUserByEmail(String email);
     void deleteUserById(Integer id);
     boolean existsUserById(Integer id);
     boolean checkPassword(String rawPassword, String hashedPassword);

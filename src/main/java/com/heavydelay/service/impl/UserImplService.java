@@ -6,12 +6,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.heavydelay.exception.ResourceNotFoundException;
+import com.heavydelay.model.dto.user.EmailUserDto;
 import com.heavydelay.model.dto.user.LoginUserDto;
 import com.heavydelay.model.dto.user.PasswordUserDto;
 import com.heavydelay.model.dto.user.PublicUserDto;
@@ -29,7 +28,6 @@ public class UserImplService implements IUser{
 
     private UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public UserImplService(UserRepository userRepository, UserMapper userMapper){
         this.userRepository = userRepository;
@@ -51,8 +49,8 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public boolean checkPassword(String rawPassword, String hashedPassword){
-        return passwordEncoder.matches(rawPassword, hashedPassword);
+    public boolean checkPassword(String comparePassword, String passwordCompared){
+        return comparePassword.equals(passwordCompared);
     }
 
     @Override
@@ -60,17 +58,7 @@ public class UserImplService implements IUser{
         User user = userRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );
-        return userMapper.toDto(user);
-    }
-
-    @Override 
-    public PublicUserDto showUserByEmail(String email){
-        for (User u : userRepository.findAll()){
-            if(u.getEmail().equalsIgnoreCase(email)){
-                return userMapper.toDto(u);
-            }
-        }
-        throw new ResourceNotFoundException("The user with Email '" + email + "' was not found");
+        return userMapper.toPublicDto(user);
     }
 
     @Override
@@ -79,7 +67,7 @@ public class UserImplService implements IUser{
             List<User> users = (List<User>) userRepository.findAll();
 
             List<PublicUserDto> usersDtos = users.stream()
-                                    .map(userMapper::toDto)
+                                    .map(userMapper::toPublicDto)
                                     .collect(Collectors.toList());
 
             if(usersDtos != null && !usersDtos.isEmpty()){
@@ -93,20 +81,25 @@ public class UserImplService implements IUser{
 
     @Override
     public PublicUserDto loginUser(LoginUserDto loginUserDto){
-        User user = userMapper.toEntity(this.showUserByEmail(loginUserDto.getEmail()));
-        if (user != null && this.checkPassword(user.getPassword(), loginUserDto.getPassword())){
-            user.setLastConnection(LocalDateTime.now());
-            userRepository.save(user);
+        User user = userRepository.findByEmail(loginUserDto.getEmail()).orElseThrow(
+            () -> new ResourceNotFoundException("The user with Email '" + loginUserDto.getEmail() + "' was not found")
+        );
+
+        if (!this.checkPassword(user.getPassword(), loginUserDto.getPassword())){
+            throw new IllegalArgumentException("password is incorrect!");
         }
-        return userMapper.toDto(user);
+        user.setLastConnection(LocalDateTime.now());
+        userRepository.save(user);
+
+        return userMapper.toPublicDto(user);
     }
 
     @Override
     public PublicUserDto registerNewUser(RegisterUserDto registerUserDto){
 
-        User createdUser = userRepository.save(userMapper.toEntity(registerUserDto));
+        User createdUser = userRepository.save(userMapper.toRegisterEntity(registerUserDto));
 
-        return userMapper.toDto(createdUser);
+        return userMapper.toPublicDto(createdUser);
     }
 
     @Override
@@ -125,7 +118,7 @@ public class UserImplService implements IUser{
         
         // Actualizo el usuario y lo devuelvo con datos filtrados
         userRepository.save(user);
-        return userMapper.toDto(user);
+        return userMapper.toPublicDto(user);
 
     }
 
@@ -135,7 +128,7 @@ public class UserImplService implements IUser{
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );
-        if(!passwordUserDto.getOldPasword().equals(user.getPassword())){
+        if(!this.checkPassword(user.getPassword(), passwordUserDto.getOldPasword())){
             throw new IllegalArgumentException("Old password is incorrect!");
         }
 
@@ -146,5 +139,14 @@ public class UserImplService implements IUser{
 
     }
 
+    @Override
+    public EmailUserDto changeUserEmail(EmailUserDto newEmail){
+        User user = userRepository.findByEmail(newEmail.getOldEmail()).orElseThrow(
+            () -> new ResourceNotFoundException("The user with Email '" + newEmail.getOldEmail() + "' was not found")
+        );
+        user.setEmail(newEmail.getNewEmail());
+        return newEmail;
+        
+    }
 
 }

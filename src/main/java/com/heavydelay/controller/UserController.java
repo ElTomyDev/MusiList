@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.heavydelay.model.dto.user.EmailUserDto;
+import com.heavydelay.model.dto.user.LoginUserDto;
 import com.heavydelay.model.dto.user.PasswordUserDto;
 import com.heavydelay.model.dto.user.PublicUserDto;
 import com.heavydelay.model.dto.user.RegisterUserDto;
@@ -58,10 +60,22 @@ public class UserController {
         PublicUserDto userCreate = userService.registerNewUser(registerUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
-            .message("User created successfully")
+            .message("User registered successfully")
             .status(HttpStatus.CREATED.value())
             .objectResponse(userCreate)
             .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginUserDto loginUserDto){
+        PublicUserDto userLogin = userService.loginUser(loginUserDto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("user logged in successfully")
+            .status(HttpStatus.OK.value())
+            .objectResponse(userLogin)
+            .build(), HttpStatus.OK
         );
     }
 
@@ -85,6 +99,18 @@ public class UserController {
             .message("User password changed successfully.")
             .status(HttpStatus.CREATED.value())
             .objectResponse(updateUser)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/user/update-email")
+    public ResponseEntity<?> changeUserPassword(@RequestBody @Valid EmailUserDto emailUserDto){
+        EmailUserDto updateEmailUser = userService.changeUserEmail(emailUserDto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User email changed successfully.")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(updateEmailUser)
             .build(), HttpStatus.CREATED
         );
     }
