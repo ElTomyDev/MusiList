@@ -8,6 +8,7 @@ import com.heavydelay.model.dto.user.UpdateUserDto;
 import com.heavydelay.model.dto.user.UserDto;
 
 public interface IUser {
+    UserDto loginUser()
     UserDto registerNewUser(RegisterUserDto userDto);
     UserDto changeUserValues(Integer id, UpdateUserDto userDto);
     PasswordUserDto changeUserPassword(Integer id, PasswordUserDto passwordUserDto);
