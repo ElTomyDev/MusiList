@@ -73,9 +73,8 @@ public class UserImplService implements IUser{
 
     @Override
     public UserDto registerNewUser(RegisterUserDto registerUserDto){
-        User user = userMapper.toEntity(registerUserDto);
 
-        User createdUser = userRepository.save(user);
+        User createdUser = userRepository.save(userMapper.toEntity(registerUserDto));
 
         return userMapper.toDto(createdUser);
     }
@@ -116,4 +115,6 @@ public class UserImplService implements IUser{
         return passwordUserDto;
 
     }
+
+
 }
