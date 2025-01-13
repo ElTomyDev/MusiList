@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.heavydelay.model.dto.user.EmailUserDto;
@@ -26,6 +28,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
     
     @Autowired
@@ -43,7 +46,7 @@ public class UserController {
         );
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> showUserById(@PathVariable Integer id) {
         PublicUserDto user = userService.showUserById(id);
         return new ResponseEntity<>(
@@ -79,7 +82,7 @@ public class UserController {
         );
     }
 
-    @PutMapping("/user/{id}/update-details")
+    @PutMapping("/{id}/update-details")
     public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody @Valid UpdateUserDto updateUserDto){
         PublicUserDto updateUser = userService.changeUserValues(id, updateUserDto);
         return new ResponseEntity<>(
@@ -91,7 +94,7 @@ public class UserController {
         );
     }
 
-    @PutMapping("/user/{id}/update-password")
+    @PutMapping("/{id}/update-password")
     public ResponseEntity<?> changeUserPassword(@PathVariable Integer id, @RequestBody @Valid PasswordUserDto passwordUserDto){
         PasswordUserDto updateUser = userService.changeUserPassword(id, passwordUserDto);
         return new ResponseEntity<>(
@@ -103,7 +106,7 @@ public class UserController {
         );
     }
 
-    @PutMapping("/user/update-email")
+    @PutMapping("/update-email")
     public ResponseEntity<?> changeUserPassword(@RequestBody @Valid EmailUserDto emailUserDto){
         EmailUserDto updateEmailUser = userService.changeUserEmail(emailUserDto);
         return new ResponseEntity<>(
@@ -112,6 +115,18 @@ public class UserController {
             .status(HttpStatus.CREATED.value())
             .objectResponse(updateEmailUser)
             .build(), HttpStatus.CREATED
+        );
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<?> deleteUserById(@PathVariable Integer id){
+        userService.deleteUserById(id);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User delete successfully.")
+            .status(HttpStatus.OK.value())
+            .objectResponse("user with ID '" + id + "'' deleted")
+            .build(), HttpStatus.OK
         );
     }
 }

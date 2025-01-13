@@ -35,7 +35,7 @@ public class UserImplService implements IUser{
         this.passwordEncoder = passwordEncoder;
     }
     
-    @Transactional(readOnly=true)
+    @Transactional(readOnly=false)
     @Override
     public void deleteUserById(Integer id) {
         User userDelete = userRepository.findById(id).orElseThrow(
