@@ -19,6 +19,8 @@ import com.heavydelay.service.IRole;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -51,6 +53,19 @@ public class RoleController {
             .status(HttpStatus.OK.value())
             .objectResponse("Role with ID '" + id + "'' delete")
             .build(), HttpStatus.OK
+        );
+    }
+
+    @PutMapping("{id}/update-name")
+    public ResponseEntity<?> changeRoleNameById(@PathVariable Integer id, @RequestBody @Valid CreateRoleDto newRoleName) {
+        PublicRoleDto role = roleService.changeRoleNameById(id, newRoleName);
+        
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("Role name updated successfully")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(role)
+            .build(), HttpStatus.CREATED
         );
     }
 

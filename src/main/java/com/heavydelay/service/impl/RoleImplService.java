@@ -58,4 +58,14 @@ public class RoleImplService implements IRole{
         return roleMapper.toDto(role);
     }
 
+    @Override
+    public PublicRoleDto changeRoleNameById(Integer id, CreateRoleDto newName){
+        Roles role = roleRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The role with ID '" + id + "not exist")
+        );
+
+        role.setRoleName(newName.getRoleName());
+        return roleMapper.toDto(role);
+    }
+
 }

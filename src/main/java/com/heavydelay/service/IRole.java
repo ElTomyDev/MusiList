@@ -10,4 +10,5 @@ public interface IRole {
     PublicRoleDto showRoleById(Integer id);
     PublicRoleDto addNewRole(CreateRoleDto newRole);
     void deleteRoleById(Integer id);
+    PublicRoleDto changeRoleNameById(Integer id, CreateRoleDto newName);
 }
