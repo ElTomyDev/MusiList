@@ -17,7 +17,5 @@ public interface IUser {
     EmailUserDto changeUserEmail(EmailUserDto newEmail);
     PublicUserDto showUserById(Integer id);
     void deleteUserById(Integer id);
-    boolean existsUserById(Integer id);
-    boolean checkPassword(String rawPassword, String hashedPassword);
     List<PublicUserDto> showAllUsers();
 }
