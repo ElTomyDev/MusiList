@@ -28,7 +28,13 @@ public class RoleImplService implements IRole{
     @Transactional(readOnly = false)
     @Override
     public PublicRoleDto addNewRole(CreateRoleDto newRole) {
+        
+        if(newRole == null || newRole.getRoleName() == null || newRole.getRoleName().trim().isEmpty()){
+            throw new IllegalArgumentException("Role name cannot be empty");
+        }
+
         Roles role = Roles.builder().roleName(newRole.getRoleName()).build();
+
         
         roleRepository.save(role);
         return roleMapper.toDto(role);
@@ -59,12 +65,14 @@ public class RoleImplService implements IRole{
     }
 
     @Override
-    public PublicRoleDto changeRoleNameById(Integer id, CreateRoleDto newName){
+    public PublicRoleDto changeRoleNameById(Integer id, CreateRoleDto roleDto){
         Roles role = roleRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("The role with ID '" + id + "not exist")
         );
 
-        role.setRoleName(newName.getRoleName());
+        role.setRoleName(roleDto.getRoleName());
+
+        roleRepository.save(role);
         return roleMapper.toDto(role);
     }
 

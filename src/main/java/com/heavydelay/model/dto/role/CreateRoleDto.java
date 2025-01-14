@@ -12,4 +12,5 @@ public class CreateRoleDto {
 
     @NotBlank(message = "The role name must not be empty")
     private String roleName;
+
 }
