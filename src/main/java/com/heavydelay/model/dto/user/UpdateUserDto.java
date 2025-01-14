@@ -1,5 +1,7 @@
 package com.heavydelay.model.dto.user;
 
+import com.heavydelay.model.entity.Roles;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,6 +17,8 @@ public class UpdateUserDto {
     @NotBlank(message = "'name' cannot be empty")
     @Size(min = 2, max = 50, message = "The 'name' must be between 2 and 50 characters long")
     private String name;
+
+    private Roles role;
 
     @NotBlank(message = "The 'lastname' cannot be empty")
     @Size(min = 2, max = 50, message = "The 'lastname' must be between 2 and 50 characters long")

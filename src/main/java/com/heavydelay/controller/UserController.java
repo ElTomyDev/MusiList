@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> showUserById(@PathVariable Integer id) {
+    public ResponseEntity<?> showUserById(@PathVariable Long id) {
         PublicUserDto user = userService.showUserById(id);
         return new ResponseEntity<>(
             MessageResponse.builder()
@@ -83,7 +83,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/update-details")
-    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody @Valid UpdateUserDto updateUserDto){
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UpdateUserDto updateUserDto){
         PublicUserDto updateUser = userService.changeUserValues(id, updateUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
@@ -95,7 +95,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/update-password")
-    public ResponseEntity<?> changeUserPassword(@PathVariable Integer id, @RequestBody @Valid PasswordUserDto passwordUserDto){
+    public ResponseEntity<?> changeUserPassword(@PathVariable Long id, @RequestBody @Valid PasswordUserDto passwordUserDto){
         PasswordUserDto updateUser = userService.changeUserPassword(id, passwordUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
@@ -119,7 +119,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<?> deleteUserById(@PathVariable Integer id){
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id){
         userService.deleteUserById(id);
         return new ResponseEntity<>(
             MessageResponse.builder()

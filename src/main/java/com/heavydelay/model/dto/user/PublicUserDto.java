@@ -3,6 +3,7 @@ package com.heavydelay.model.dto.user;
 import java.time.LocalDateTime;
 
 import com.heavydelay.enums.UserStatus;
+import com.heavydelay.model.entity.Roles;
 
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,8 @@ import lombok.ToString;
 @Builder
 public class PublicUserDto{
 
-    private Integer idUser;
+    private Long idUser;
+    private Roles role;
     private String name;
     private String lastname;
     private String username;

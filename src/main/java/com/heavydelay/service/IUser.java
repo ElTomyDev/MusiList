@@ -12,10 +12,10 @@ import com.heavydelay.model.dto.user.UpdateUserDto;
 public interface IUser {
     PublicUserDto loginUser(LoginUserDto loginUserDto);
     PublicUserDto registerNewUser(RegisterUserDto userDto);
-    PublicUserDto changeUserValues(Integer id, UpdateUserDto userDto);
-    PasswordUserDto changeUserPassword(Integer id, PasswordUserDto passwordUserDto);
+    PublicUserDto changeUserValues(Long id, UpdateUserDto userDto);
+    PasswordUserDto changeUserPassword(Long id, PasswordUserDto passwordUserDto);
     EmailUserDto changeUserEmail(EmailUserDto newEmail);
-    PublicUserDto showUserById(Integer id);
-    void deleteUserById(Integer id);
+    PublicUserDto showUserById(Long id);
+    void deleteUserById(Long id);
     List<PublicUserDto> showAllUsers();
 }

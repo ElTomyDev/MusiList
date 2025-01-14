@@ -37,7 +37,7 @@ public class UserImplService implements IUser{
     
     @Transactional(readOnly=false)
     @Override
-    public void deleteUserById(Integer id) {
+    public void deleteUserById(Long id) {
         User userDelete = userRepository.findById(id).orElseThrow(
             () -> new EntityNotFoundException("User with id " + id + " not found")
         );
@@ -45,7 +45,7 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public PublicUserDto showUserById(Integer id) {
+    public PublicUserDto showUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );
@@ -88,7 +88,7 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public PublicUserDto changeUserValues(Integer id, UpdateUserDto updateUserDto){
+    public PublicUserDto changeUserValues(Long id, UpdateUserDto updateUserDto){
 
         if (id == null){
             throw new IllegalArgumentException("ID cannot be null to update a user.");
@@ -108,7 +108,7 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public PasswordUserDto changeUserPassword(Integer id, PasswordUserDto passwordUserDto){
+    public PasswordUserDto changeUserPassword(Long id, PasswordUserDto passwordUserDto){
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );

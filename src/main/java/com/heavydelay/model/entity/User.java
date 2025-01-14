@@ -11,6 +11,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +32,11 @@ public class User{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_user")
-    private Integer idUser;
+    private Long idUser;
+
+    @ManyToOne
+    @JoinColumn(name = "id_role")
+    private Roles role;
     
     @Column(name="name")
     private String name;
