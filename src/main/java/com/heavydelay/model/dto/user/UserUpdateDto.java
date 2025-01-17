@@ -1,7 +1,7 @@
 package com.heavydelay.model.dto.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.heavydelay.enums.UserStatus;
 import com.heavydelay.validation.ValidPassword;
 
 import jakarta.validation.constraints.Email;
@@ -19,36 +19,44 @@ public class UserUpdateDto {
     public interface LoginUserView {}
     public interface PasswordUpdateView {}
     public interface EmailUpdateView {}
-    public interface OtherValuesUpdateView {}
+    public interface NameUpdateView {}
+    public interface RoleUpdateView {}
+    public interface LastnameUpdateView {}
+    public interface UsernameUpdateView {}
+    public interface DescriptionUpdateView {}
+    public interface StatusUpdateView {}
+    public interface AllValuesUpdateView {}
 
     // Basic DATA
-    @JsonView({OtherValuesUpdateView.class, RegisterUserView.class})
-    @NotBlank(groups =  {OtherValuesUpdateView.class, RegisterUserView.class}, message = "'name' cannot be empty")
-    @Size(min = 2, max = 50, message = "The 'name' must be between 2 and 50 characters long")
+    @JsonView({AllValuesUpdateView.class, RegisterUserView.class, NameUpdateView.class})
+    @NotBlank(groups =  {AllValuesUpdateView.class, RegisterUserView.class, NameUpdateView.class}, message = "'name' cannot be empty")
+    @Size(groups =  {AllValuesUpdateView.class, RegisterUserView.class, NameUpdateView.class}, min = 2, max = 50, message = "The 'name' must be between 2 and 50 characters long")
     private String name;
 
-    @JsonView(OtherValuesUpdateView.class)
-    @NotBlank(groups =  OtherValuesUpdateView.class, message = "The 'role name' cannot be empty")
+    @JsonView({AllValuesUpdateView.class, RoleUpdateView.class})
+    @NotBlank(groups =  {AllValuesUpdateView.class, RoleUpdateView.class}, message = "The 'role name' cannot be empty")
     private String roleName;
 
-    @JsonView({OtherValuesUpdateView.class, RegisterUserView.class})
-    @NotBlank(groups =  {OtherValuesUpdateView.class, RegisterUserView.class}, message = "The 'lastname' cannot be empty")
-    @Size(min = 2, max = 50, message = "The 'lastname' must be between 2 and 50 characters long")
+    
+    @JsonView({AllValuesUpdateView.class, RegisterUserView.class, LastnameUpdateView.class})
+    @NotBlank(groups =  {AllValuesUpdateView.class, RegisterUserView.class, LastnameUpdateView.class}, message = "The 'lastname' cannot be empty")
+    @Size(groups =  {AllValuesUpdateView.class, RegisterUserView.class, LastnameUpdateView.class}, min = 2, max = 50, message = "The 'lastname' must be between 2 and 50 characters long")
     private String lastname;
 
-    @JsonView({OtherValuesUpdateView.class, RegisterUserView.class})
-    @NotBlank(groups =  {OtherValuesUpdateView.class, RegisterUserView.class}, message = "The 'username' cannot be empty")
-    @Size(min = 2, max = 50, message = "The 'username' must be between 2 and 50 characters long")
+    @JsonView({AllValuesUpdateView.class, RegisterUserView.class, UsernameUpdateView.class})
+    @NotBlank(groups =  {AllValuesUpdateView.class, RegisterUserView.class, UsernameUpdateView.class}, message = "The 'username' cannot be empty")
+    @Size(groups =  {AllValuesUpdateView.class, RegisterUserView.class, UsernameUpdateView.class}, min = 2, max = 50, message = "The 'username' must be between 2 and 50 characters long")
     private String username;
 
-    @JsonView(OtherValuesUpdateView.class)
-    @NotNull(groups =  OtherValuesUpdateView.class, message = "The 'description' is required")
-    @Size(max = 255, message = "The 'description' cannot exceed 255 characters")
-    private String description;
+    @JsonView({AllValuesUpdateView.class, StatusUpdateView.class})
+    @NotBlank(groups =  {AllValuesUpdateView.class, StatusUpdateView.class}, message = "The 'username' cannot be empty")
+    @Size(groups =  {AllValuesUpdateView.class, StatusUpdateView.class}, min = 2, max = 50, message = "The 'username' must be between 2 and 50 characters long")
+    private UserStatus status;
 
-    @JsonIgnore
-    @NotNull(message = "The 'Last Conecction' is required")
-    private String lastConnection;
+    @JsonView({AllValuesUpdateView.class, DescriptionUpdateView.class})
+    @NotNull(groups =  {AllValuesUpdateView.class, DescriptionUpdateView.class}, message = "The 'description' is required")
+    @Size(groups =  {AllValuesUpdateView.class, DescriptionUpdateView.class}, max = 255, message = "The 'description' cannot exceed 255 characters")
+    private String description;
 
     // Password DATA
 
@@ -78,8 +86,7 @@ public class UserUpdateDto {
     private String newEmail;
 
     @JsonView({RegisterUserView.class, LoginUserView.class})
-    @NotBlank(groups =  {RegisterUserView.class, LoginUserView.class}, message = "The 'email' cannot be empty")
-    @Email(groups =  {RegisterUserView.class, LoginUserView.class}, message = "It must be a valid email")
+    @NotBlank(groups =  RegisterUserView.class, message = "The 'email' cannot be empty")
     private String email;
 
 

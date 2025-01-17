@@ -69,6 +69,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @JsonView(UserUpdateDto.LoginUserView.class)
     public ResponseEntity<?> loginUser(@RequestBody UserUpdateDto loginUserDto){
         UserReturnDto userLogin = userService.loginUser(loginUserDto);
         return new ResponseEntity<>(
@@ -81,9 +82,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}/update-details")
-    @JsonView(UserUpdateDto.OtherValuesUpdateView.class)
+    @JsonView(UserUpdateDto.AllValuesUpdateView.class)
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UserUpdateDto updateUserDto){
-        UserReturnDto updateUser = userService.changeUserValues(id, updateUserDto);
+        UserReturnDto updateUser = userService.changeUserValuesById(id, updateUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User successfully updated.")
@@ -95,8 +96,86 @@ public class UserController {
 
     @PutMapping("/{id}/update-password")
     @JsonView(UserUpdateDto.PasswordUpdateView.class)
-    public ResponseEntity<?> changeUserPassword(@PathVariable Long id, @RequestBody @Valid UserUpdateDto passwordUserDto){
+    public ResponseEntity<?> changeUserPasswordById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto passwordUserDto){
         UserReturnDto updateUser = userService.changeUserPasswordById(id, passwordUserDto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User password changed successfully.")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(updateUser)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}/update-name")
+    @JsonView(UserUpdateDto.NameUpdateView.class)
+    public ResponseEntity<?> changeUserNameById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto nameUserDto){
+        UserReturnDto updateUser = userService.changeUserNameById(id, nameUserDto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User password changed successfully.")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(updateUser)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}/update-lastname")
+    @JsonView(UserUpdateDto.LastnameUpdateView.class)
+    public ResponseEntity<?> changeUserLastnameById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto lastnameUserDto){
+        UserReturnDto updateUser = userService.changeUserLastnameById(id, lastnameUserDto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User password changed successfully.")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(updateUser)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}/update-lastname")
+    @JsonView(UserUpdateDto.UsernameUpdateView.class)
+    public ResponseEntity<?> changeUserUsernameById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto usernameUserDto){
+        UserReturnDto updateUser = userService.changeUserUsernameById(id, usernameUserDto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User password changed successfully.")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(updateUser)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}/update-description")
+    @JsonView(UserUpdateDto.DescriptionUpdateView.class)
+    public ResponseEntity<?> changeUserDescriptionById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto descriptionUserDto){
+        UserReturnDto updateUser = userService.changeUserDescriptionById(id, descriptionUserDto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User password changed successfully.")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(updateUser)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}/update-status")
+    @JsonView(UserUpdateDto.StatusUpdateView.class)
+    public ResponseEntity<?> changeUserStatusById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto statusUserDto){
+        UserReturnDto updateUser = userService.changeUserLastnameById(id, statusUserDto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User password changed successfully.")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(updateUser)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}/update-lastname")
+    @JsonView(UserUpdateDto.RoleUpdateView.class)
+    public ResponseEntity<?> changeUserRoleById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto roleUserDto){
+        UserReturnDto updateUser = userService.changeUserRoleById(id, roleUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User password changed successfully.")
@@ -108,7 +187,7 @@ public class UserController {
 
     @PutMapping("/update-email")
     @JsonView(UserUpdateDto.EmailUpdateView.class)
-    public ResponseEntity<?> changeUserPassword(@RequestBody @Valid UserUpdateDto emailUserDto){
+    public ResponseEntity<?> changeUserEmail(@RequestBody @Valid UserUpdateDto emailUserDto){
         UserReturnDto updateEmailUser = userService.changeUserEmail(emailUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
@@ -130,4 +209,5 @@ public class UserController {
             .build(), HttpStatus.OK
         );
     }
+
 }

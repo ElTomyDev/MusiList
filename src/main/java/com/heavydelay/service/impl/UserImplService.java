@@ -98,7 +98,7 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public UserReturnDto changeUserValues(Long id, UserUpdateDto dto){
+    public UserReturnDto changeUserValuesById(Long id, UserUpdateDto dto){
 
         if (id == null){
             throw new IllegalArgumentException("ID cannot be null to update a user.");
@@ -147,6 +147,79 @@ public class UserImplService implements IUser{
         user.setEmail(dto.getNewEmail());
         userRepository.save(user);
         return UserReturnDto.toEmailDto(user);
+        
+    }
+
+    @Override
+    public UserReturnDto changeUserNameById(Long id, UserUpdateDto dto){
+        User user = userRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
+        );
+
+        user.setName(dto.getName());
+        userRepository.save(user);
+        return UserReturnDto.toBasicDto(user);
+        
+    }
+
+    @Override
+    public UserReturnDto changeUserLastnameById(Long id, UserUpdateDto dto){
+        User user = userRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
+        );
+
+        user.setLastname(dto.getLastname());
+        userRepository.save(user);
+        return UserReturnDto.toBasicDto(user);
+    }
+    
+    @Override
+    public UserReturnDto changeUserUsernameById(Long id, UserUpdateDto dto){
+        User user = userRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
+        );
+
+        user.setUsername(dto.getUsername());
+        userRepository.save(user);
+        return UserReturnDto.toBasicDto(user);
+        
+    }
+
+    @Override
+    public UserReturnDto changeUserDescriptionById(Long id, UserUpdateDto dto){
+        User user = userRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
+        );
+
+        user.setDescription(dto.getDescription());
+        userRepository.save(user);
+        return UserReturnDto.toBasicDto(user);
+        
+    }
+    
+    @Override
+    public UserReturnDto changeUserStateById(Long id, UserUpdateDto dto){
+        User user = userRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
+        );
+
+        user.setStatus(dto.getStatus());
+        userRepository.save(user);
+        return UserReturnDto.toBasicDto(user);
+        
+    }
+
+    @Override
+    public UserReturnDto changeUserRoleById(Long id, UserUpdateDto dto){
+        User user = userRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
+        );
+
+        user.setRole(roleRepository.findByRoleName(dto.getRoleName()).orElseThrow(
+            () -> new ResourceNotFoundException("The Role with name '" + dto.getRoleName() + "' was not found")
+        ));
+        userRepository.save(user);
+        return UserReturnDto.toBasicDto(user);
         
     }
 

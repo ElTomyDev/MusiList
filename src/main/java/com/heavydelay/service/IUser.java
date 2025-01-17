@@ -8,10 +8,20 @@ import com.heavydelay.model.dto.user.UserUpdateDto;
 public interface IUser {
     UserReturnDto loginUser(UserUpdateDto loginUserDto);
     UserReturnDto registerNewUser(UserUpdateDto dto);
-    UserReturnDto changeUserValues(Long id, UserUpdateDto dto);
+
+    UserReturnDto changeUserValuesById(Long id, UserUpdateDto dto);
     UserReturnDto changeUserPasswordById(Long id, UserUpdateDto dto);
+    UserReturnDto changeUserNameById(Long id, UserUpdateDto dto);
+    UserReturnDto changeUserLastnameById(Long id, UserUpdateDto dto);
+    UserReturnDto changeUserUsernameById(Long id, UserUpdateDto dto);
+    UserReturnDto changeUserDescriptionById(Long id, UserUpdateDto dto);
+    UserReturnDto changeUserStateById(Long id, UserUpdateDto dto);
+    UserReturnDto changeUserRoleById(Long id, UserUpdateDto dto);
     UserReturnDto changeUserEmail(UserUpdateDto dto);
+    
+
     UserReturnDto showUserById(Long id, boolean detailed);
-    void deleteUserById(Long id);
     List<UserReturnDto> showAllUsers(boolean detailed);
+
+    void deleteUserById(Long id);
 }
