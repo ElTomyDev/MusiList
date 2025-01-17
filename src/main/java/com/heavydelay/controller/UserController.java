@@ -133,7 +133,7 @@ public class UserController {
         );
     }
 
-    @PutMapping("/{id}/update-lastname")
+    @PutMapping("/{id}/update-username")
     @JsonView(UserUpdateDto.UsernameUpdateView.class)
     public ResponseEntity<?> changeUserUsernameById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto usernameUserDto){
         UserReturnDto updateUser = userService.changeUserUsernameById(id, usernameUserDto);
@@ -172,7 +172,7 @@ public class UserController {
         );
     }
 
-    @PutMapping("/{id}/update-lastname")
+    @PutMapping("/{id}/update-role")
     @JsonView(UserUpdateDto.RoleUpdateView.class)
     public ResponseEntity<?> changeUserRoleById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto roleUserDto){
         UserReturnDto updateUser = userService.changeUserRoleById(id, roleUserDto);
