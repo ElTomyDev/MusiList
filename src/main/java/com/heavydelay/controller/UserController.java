@@ -14,12 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.heavydelay.model.dto.user.EmailUserDto;
-import com.heavydelay.model.dto.user.LoginUserDto;
-import com.heavydelay.model.dto.user.PasswordUserDto;
-import com.heavydelay.model.dto.user.PublicUserDto;
-import com.heavydelay.model.dto.user.RegisterUserDto;
-import com.heavydelay.model.dto.user.UpdateUserDto;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.heavydelay.model.dto.user.UserReturnDto;
+import com.heavydelay.model.dto.user.UserUpdateDto;
 import com.heavydelay.model.payload.MessageResponse;
 import com.heavydelay.service.IUser;
 
@@ -34,9 +31,9 @@ public class UserController {
     @Autowired
     private IUser userService;
 
-    @GetMapping("/users")
-    public ResponseEntity<?> showAllUsers(){
-        List<PublicUserDto> users = userService.showAllUsers();
+    @GetMapping("/users/{detailed}")
+    public ResponseEntity<?> showAllUsers(@PathVariable boolean detailed){
+        List<UserReturnDto> users = userService.showAllUsers(detailed);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("Users successfully obtained")
@@ -46,9 +43,9 @@ public class UserController {
         );
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> showUserById(@PathVariable Long id) {
-        PublicUserDto user = userService.showUserById(id);
+    @GetMapping("/{id}({detailed})")
+    public ResponseEntity<?> showUserById(@PathVariable Long id, @PathVariable boolean detailed) {
+        UserReturnDto user = userService.showUserById(id, detailed);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User successfully obtained.")
@@ -59,8 +56,9 @@ public class UserController {
     }
     
     @PostMapping("/register")
-    public ResponseEntity<?> registerNewUser(@RequestBody @Valid RegisterUserDto registerUserDto) {
-        PublicUserDto userCreate = userService.registerNewUser(registerUserDto);
+    @JsonView(UserUpdateDto.RegisterUserView.class)
+    public ResponseEntity<?> registerNewUser(@RequestBody @Valid UserUpdateDto registerUserDto) {
+        UserReturnDto userCreate = userService.registerNewUser(registerUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User registered successfully")
@@ -71,8 +69,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginUserDto loginUserDto){
-        PublicUserDto userLogin = userService.loginUser(loginUserDto);
+    public ResponseEntity<?> loginUser(@RequestBody UserUpdateDto loginUserDto){
+        UserReturnDto userLogin = userService.loginUser(loginUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("user logged in successfully")
@@ -83,8 +81,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}/update-details")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UpdateUserDto updateUserDto){
-        PublicUserDto updateUser = userService.changeUserValues(id, updateUserDto);
+    @JsonView(UserUpdateDto.OtherValuesUpdateView.class)
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UserUpdateDto updateUserDto){
+        UserReturnDto updateUser = userService.changeUserValues(id, updateUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User successfully updated.")
@@ -95,8 +94,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}/update-password")
-    public ResponseEntity<?> changeUserPassword(@PathVariable Long id, @RequestBody @Valid PasswordUserDto passwordUserDto){
-        PasswordUserDto updateUser = userService.changeUserPassword(id, passwordUserDto);
+    @JsonView(UserUpdateDto.PasswordUpdateView.class)
+    public ResponseEntity<?> changeUserPassword(@PathVariable Long id, @RequestBody @Valid UserUpdateDto passwordUserDto){
+        UserReturnDto updateUser = userService.changeUserPasswordById(id, passwordUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User password changed successfully.")
@@ -107,8 +107,9 @@ public class UserController {
     }
 
     @PutMapping("/update-email")
-    public ResponseEntity<?> changeUserPassword(@RequestBody @Valid EmailUserDto emailUserDto){
-        EmailUserDto updateEmailUser = userService.changeUserEmail(emailUserDto);
+    @JsonView(UserUpdateDto.EmailUpdateView.class)
+    public ResponseEntity<?> changeUserPassword(@RequestBody @Valid UserUpdateDto emailUserDto){
+        UserReturnDto updateEmailUser = userService.changeUserEmail(emailUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User email changed successfully.")

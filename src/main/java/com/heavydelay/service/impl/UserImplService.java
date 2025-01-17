@@ -2,6 +2,7 @@ package com.heavydelay.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,14 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.heavydelay.exception.ResourceNotFoundException;
-import com.heavydelay.model.dto.user.EmailUserDto;
-import com.heavydelay.model.dto.user.LoginUserDto;
-import com.heavydelay.model.dto.user.PasswordUserDto;
-import com.heavydelay.model.dto.user.PublicUserDto;
-import com.heavydelay.model.dto.user.RegisterUserDto;
-import com.heavydelay.model.dto.user.UpdateUserDto;
+import com.heavydelay.model.dto.user.UserReturnDto;
+import com.heavydelay.model.dto.user.UserUpdateDto;
 import com.heavydelay.model.entity.User;
-import com.heavydelay.model.mapper.UserMapper;
+import com.heavydelay.repository.RoleRepository;
 import com.heavydelay.repository.UserRepository;
 import com.heavydelay.service.IUser;
 
@@ -26,12 +23,12 @@ import jakarta.persistence.EntityNotFoundException;
 public class UserImplService implements IUser{
 
     private UserRepository userRepository;
-    private final UserMapper userMapper;
+    private RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserImplService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder){
+    public UserImplService(UserRepository userRepository,RoleRepository roleRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
     
@@ -45,50 +42,63 @@ public class UserImplService implements IUser{
     }
 
     @Override
-    public PublicUserDto showUserById(Long id) {
+    public UserReturnDto showUserById(Long id, boolean detailed) {
         User user = userRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );
-        return userMapper.toPublicDto(user);
+        return detailed ? UserReturnDto.toDetailedDto(user) : UserReturnDto.toBasicDto(user);
     }
 
     @Override
-    public List<PublicUserDto> showAllUsers() {
+    public List<UserReturnDto> showAllUsers(boolean detailed) {
         List<User> users = (List<User>) userRepository.findAll();
 
+        // Selección del DTO a usar 
+        Function<User, UserReturnDto> mapper = detailed ? UserReturnDto::toDetailedDto : UserReturnDto::toBasicDto;
+
         // Retorno y mapea la lista con todos los usuarios
-        return users.stream().map(userMapper::toPublicDto).collect(Collectors.toList());
+        return users.stream().map(mapper).collect(Collectors.toList());
     }
 
     @Override
-    public PublicUserDto loginUser(LoginUserDto loginUserDto){
-        User user = userRepository.findByEmail(loginUserDto.getEmail()).orElseThrow(
-            () -> new ResourceNotFoundException("The user with Email '" + loginUserDto.getEmail() + "' was not found")
+    public UserReturnDto loginUser(UserUpdateDto dto){
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(
+            () -> new ResourceNotFoundException("The user with Email '" + dto.getEmail() + "' was not found")
         );
         // Comprueba la contraseña
-        if (!passwordEncoder.matches(loginUserDto.getPassword(), user.getPassword())){
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())){
             throw new IllegalArgumentException("password is incorrect!");
         }
 
         user.setLastConnection(LocalDateTime.now());
         userRepository.save(user);
-        return userMapper.toPublicDto(user);
+        return UserReturnDto.toBasicDto(user);
     }
-
+ 
     @Override
-    public PublicUserDto registerNewUser(RegisterUserDto registerUserDto){
+    public UserReturnDto registerNewUser(UserUpdateDto dto){
 
-        User user = userMapper.toRegisterEntity(registerUserDto);
+        User user = new User();
+
+        user.setName(dto.getName());
+        user.setLastname(dto.getLastname());
+        user.setEmail(dto.getEmail());
+        user.setLastConnection(LocalDateTime.now());
+
+        // Se asigna un rol por defecto que seria 'None'
+        user.setRole(roleRepository.findByRoleName("None").orElseThrow(
+            () -> new ResourceNotFoundException("Default role not found")
+        ));
 
         // Hasheo de contraseña
-        user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         User createdUser = userRepository.save(user);
-        return userMapper.toPublicDto(createdUser);
+        return UserReturnDto.toBasicDto(createdUser);
     }
 
     @Override
-    public PublicUserDto changeUserValues(Long id, UpdateUserDto updateUserDto){
+    public UserReturnDto changeUserValues(Long id, UserUpdateDto dto){
 
         if (id == null){
             throw new IllegalArgumentException("ID cannot be null to update a user.");
@@ -96,41 +106,47 @@ public class UserImplService implements IUser{
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );
-        user.setName(updateUserDto.getName());
-        user.setLastname(updateUserDto.getLastname());
-        user.setUsername(updateUserDto.getUsername());
-        user.setDescription(updateUserDto.getDescription());
+        user.setName(dto.getName());
+        user.setLastname(dto.getLastname());
+        user.setUsername(dto.getUsername());
+        user.setDescription(dto.getDescription());
+        user.setRole(roleRepository.findByRoleName(dto.getRoleName()).orElseThrow(
+            () -> new ResourceNotFoundException("The Role with name '" + dto.getRoleName() + "' was not found")
+        ));
         
         // Actualizo el usuario y lo devuelvo con datos filtrados
         userRepository.save(user);
-        return userMapper.toPublicDto(user);
+        return UserReturnDto.toBasicDto(user);
 
     }
 
     @Override
-    public PasswordUserDto changeUserPassword(Long id, PasswordUserDto passwordUserDto){
+    public UserReturnDto changeUserPasswordById(Long id, UserUpdateDto dto){
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );
 
-        if(!passwordEncoder.matches(passwordUserDto.getOldPasword(), user.getPassword())){
+        if(!passwordEncoder.matches(dto.getOldPasword(), user.getPassword())){
+
             throw new IllegalArgumentException("Old password is incorrect!");
         }
 
         // Haseo de contraseña
-        user.setPassword(passwordEncoder.encode(passwordUserDto.getNewPasword()));
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
-        return passwordUserDto;
+        return UserReturnDto.toPasswordDto(user);
 
     }
 
     @Override
-    public EmailUserDto changeUserEmail(EmailUserDto newEmail){
-        User user = userRepository.findByEmail(newEmail.getOldEmail()).orElseThrow(
-            () -> new ResourceNotFoundException("The user with Email '" + newEmail.getOldEmail() + "' was not found")
+    public UserReturnDto changeUserEmail(UserUpdateDto dto){
+        User user = userRepository.findByEmail(dto.getOldEmail()).orElseThrow(
+            () -> new ResourceNotFoundException("The user with Email '" + dto.getOldEmail() + "' was not found")
         );
-        user.setEmail(newEmail.getNewEmail());
-        return newEmail;
+
+        user.setEmail(dto.getNewEmail());
+        userRepository.save(user);
+        return UserReturnDto.toEmailDto(user);
         
     }
 
