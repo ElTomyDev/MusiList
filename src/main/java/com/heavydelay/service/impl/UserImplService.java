@@ -26,7 +26,7 @@ public class UserImplService implements IUser{
     private RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserImplService(UserRepository userRepository,RoleRepository roleRepository, PasswordEncoder passwordEncoder){
+    public UserImplService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -78,20 +78,19 @@ public class UserImplService implements IUser{
     @Override
     public UserReturnDto registerNewUser(UserUpdateDto dto){
 
-        User user = new User();
+        User user = User.builder()
+                    .name(dto.getName())
+                    .lastname(dto.getLastname())
+                    .username(dto.getUsername())
+                    .email(dto.getEmail())
+                    .password(passwordEncoder.encode(dto.getPassword())) // contraseña haseada
+                    .lastConnection(LocalDateTime.now()).build();
 
-        user.setName(dto.getName());
-        user.setLastname(dto.getLastname());
-        user.setEmail(dto.getEmail());
-        user.setLastConnection(LocalDateTime.now());
-
+        
         // Se asigna un rol por defecto que seria 'None'
         user.setRole(roleRepository.findByRoleName("None").orElseThrow(
             () -> new ResourceNotFoundException("Default role not found")
         ));
-
-        // Hasheo de contraseña
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         User createdUser = userRepository.save(user);
         return UserReturnDto.toBasicDto(createdUser);
@@ -198,7 +197,7 @@ public class UserImplService implements IUser{
     }
     
     @Override
-    public UserReturnDto changeUserStateById(Long id, UserUpdateDto dto){
+    public UserReturnDto changeUserStatusById(Long id, UserUpdateDto dto){
         User user = userRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
         );

@@ -15,7 +15,7 @@ public interface IUser {
     UserReturnDto changeUserLastnameById(Long id, UserUpdateDto dto);
     UserReturnDto changeUserUsernameById(Long id, UserUpdateDto dto);
     UserReturnDto changeUserDescriptionById(Long id, UserUpdateDto dto);
-    UserReturnDto changeUserStateById(Long id, UserUpdateDto dto);
+    UserReturnDto changeUserStatusById(Long id, UserUpdateDto dto);
     UserReturnDto changeUserRoleById(Long id, UserUpdateDto dto);
     UserReturnDto changeUserEmail(UserUpdateDto dto);
     

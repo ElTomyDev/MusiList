@@ -41,87 +41,47 @@ public class UserReturnDto{
     private LocalDateTime createDate;
 
     public static UserReturnDto toBasicDto(User user){
-        return new UserReturnDto(
-            user.getIdUser(), 
-            null,
-            user.getRole().getRoleName(), 
-            user.getName(), 
-            user.getLastname(), 
-            user.getUsername(), 
-            null, 
-            user.getDescription(), 
-            null, 
-            user.getStatus(), 
-            user.getLastConnection(), 
-            user.getCreateDate()
-        );
+        return UserReturnDto.builder()
+               .idUser(user.getIdUser())
+               .roleName(user.getRole().getRoleName())
+               .name(user.getName())
+               .lastname(user.getLastname())
+               .username(user.getUsername())
+               .description(user.getDescription())
+               .status(user.getStatus())
+               .lastConnection(user.getLastConnection())
+               .createDate(user.getCreateDate()).build();
     }
 
     public static UserReturnDto toDetailedDto(User user){
-        return new UserReturnDto(
-            user.getIdUser(), 
-            user.getRole(),
-            null, 
-            user.getName(), 
-            user.getLastname(), 
-            user.getUsername(), 
-            null, 
-            user.getDescription(), 
-            null, 
-            user.getStatus(), 
-            user.getLastConnection(), 
-            user.getCreateDate()
-        );
+        return UserReturnDto.builder()
+               .idUser(user.getIdUser())
+               .role(user.getRole())
+               .name(user.getName())
+               .lastname(user.getLastname())
+               .username(user.getUsername())
+               .description(user.getDescription())
+               .status(user.getStatus())
+               .lastConnection(user.getLastConnection())
+               .createDate(user.getCreateDate()).build();
     }
 
     public static UserReturnDto toSensitiveInformationDto(User user){
-        return new UserReturnDto(
-            null, 
-            null,
-            null,
-            null,
-            null,
-            null,
-            user.getEmail(), 
-            null,
-            user.getPassword(), 
-            null,
-            null,
-            null
-        );
+        return UserReturnDto.builder()
+               .idUser(user.getIdUser())
+               .password(user.getPassword())
+               .email(user.getEmail()).build();
     }
 
     public static UserReturnDto toPasswordDto(User user){
-        return new UserReturnDto(
-            null, 
-            null,
-            null,
-            null,
-            null,
-            null,
-            null, 
-            null,
-            user.getPassword(), 
-            null,
-            null,
-            null
-        );
+        return UserReturnDto.builder()
+               .idUser(user.getIdUser())
+               .password(user.getPassword()).build();
     }
 
     public static UserReturnDto toEmailDto(User user){
-        return new UserReturnDto(
-            null, 
-            null,
-            null,
-            null,
-            null,
-            null,
-            user.getEmail(), 
-            null,
-            null, 
-            null,
-            null,
-            null
-        );
+        return UserReturnDto.builder()
+               .idUser(user.getIdUser())
+               .email(user.getEmail()).build();
     }
 }

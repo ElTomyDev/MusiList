@@ -162,7 +162,7 @@ public class UserController {
     @PutMapping("/{id}/update-status")
     @JsonView(UserUpdateDto.StatusUpdateView.class)
     public ResponseEntity<?> changeUserStatusById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto statusUserDto){
-        UserReturnDto updateUser = userService.changeUserLastnameById(id, statusUserDto);
+        UserReturnDto updateUser = userService.changeUserStatusById(id, statusUserDto);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("User password changed successfully.")
