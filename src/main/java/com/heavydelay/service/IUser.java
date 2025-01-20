@@ -22,6 +22,7 @@ public interface IUser {
 
     UserReturnDto showUserById(Long id, boolean detailed);
     List<UserReturnDto> showAllUsers(boolean detailed);
+    UserReturnDto showUserAdminById(Long id);
 
     void deleteUserById(Long id);
 }

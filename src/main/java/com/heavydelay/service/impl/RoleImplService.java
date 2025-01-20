@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.heavydelay.exception.ResourceNotFoundException;
-import com.heavydelay.model.dto.role.CreateRoleDto;
-import com.heavydelay.model.dto.role.PublicRoleDto;
+import com.heavydelay.model.dto.role.RoleReturnDto;
+import com.heavydelay.model.dto.role.RoleUpdateDto;
 import com.heavydelay.model.entity.Roles;
-import com.heavydelay.model.mapper.RoleMapper;
 import com.heavydelay.repository.RoleRepository;
 import com.heavydelay.service.IRole;
 
@@ -18,16 +17,14 @@ import com.heavydelay.service.IRole;
 public class RoleImplService implements IRole{
 
     private RoleRepository roleRepository;
-    private final RoleMapper roleMapper;
 
-    public RoleImplService(RoleRepository roleRepository, RoleMapper roleMapper){
+    public RoleImplService(RoleRepository roleRepository){
         this.roleRepository = roleRepository;
-        this.roleMapper = roleMapper;
     }
     
     @Transactional(readOnly = false)
     @Override
-    public PublicRoleDto addNewRole(CreateRoleDto newRole) {
+    public RoleReturnDto addNewRole(RoleUpdateDto newRole) {
         
         if(newRole == null || newRole.getRoleName() == null || newRole.getRoleName().trim().isEmpty()){
             throw new IllegalArgumentException("Role name cannot be empty");
@@ -37,7 +34,7 @@ public class RoleImplService implements IRole{
 
         
         roleRepository.save(role);
-        return roleMapper.toDto(role);
+        return RoleReturnDto.toBasicDto(role);
     }
 
     @Override
@@ -49,23 +46,23 @@ public class RoleImplService implements IRole{
     }
 
     @Override
-    public List<PublicRoleDto> showAllRoles() {
+    public List<RoleReturnDto> showAllRoles() {
          List<Roles> roles = (List<Roles>) roleRepository.findAll();
 
         // Retorno y mapea la lista con todos los roles
-        return roles.stream().map(roleMapper::toDto).collect(Collectors.toList());
+        return roles.stream().map(RoleReturnDto::toBasicDto).collect(Collectors.toList());
     }
 
     @Override
-    public PublicRoleDto showRoleById(Integer id) {
+    public RoleReturnDto showRoleById(Integer id) {
         Roles role = roleRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("The role with ID '" + id + "not exist")
         );
-        return roleMapper.toDto(role);
+        return RoleReturnDto.toBasicDto(role);
     }
 
     @Override
-    public PublicRoleDto changeRoleNameById(Integer id, CreateRoleDto roleDto){
+    public RoleReturnDto changeRoleNameById(Integer id, RoleUpdateDto roleDto){
         Roles role = roleRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("The role with ID '" + id + "not exist")
         );
@@ -73,7 +70,7 @@ public class RoleImplService implements IRole{
         role.setRoleName(roleDto.getRoleName());
 
         roleRepository.save(role);
-        return roleMapper.toDto(role);
+        return RoleReturnDto.toBasicDto(role);
     }
 
 }

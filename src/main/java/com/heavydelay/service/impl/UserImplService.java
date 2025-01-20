@@ -222,4 +222,13 @@ public class UserImplService implements IUser{
         
     }
 
+    // Para los endpoints de administrador
+    @Override
+    public UserReturnDto showUserAdminById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The user with ID '" + id + "' was not found")
+        );
+        return UserReturnDto.toAllDataDto(user);
+    }
+    
 }

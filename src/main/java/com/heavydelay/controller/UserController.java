@@ -31,6 +31,7 @@ public class UserController {
     @Autowired
     private IUser userService;
 
+    // Endpoints de tipo GET 
     @GetMapping("/users/{detailed}")
     public ResponseEntity<?> showAllUsers(@PathVariable boolean detailed){
         List<UserReturnDto> users = userService.showAllUsers(detailed);
@@ -54,7 +55,8 @@ public class UserController {
             .build(), HttpStatus.OK
         );
     }
-    
+
+    // Endpoints de tipo POST
     @PostMapping("/register")
     @JsonView(UserUpdateDto.RegisterUserView.class)
     public ResponseEntity<?> registerNewUser(@RequestBody @Valid UserUpdateDto registerUserDto) {
@@ -78,9 +80,10 @@ public class UserController {
             .status(HttpStatus.OK.value())
             .objectResponse(userLogin)
             .build(), HttpStatus.OK
-        );
-    }
+            );
+        }
 
+    // Endpoints de tipo PUT
     @PutMapping("/{id}/update-details")
     @JsonView(UserUpdateDto.AllValuesUpdateView.class)
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UserUpdateDto updateUserDto){
@@ -93,7 +96,7 @@ public class UserController {
             .build(), HttpStatus.CREATED
         );
     }
-
+    
     @PutMapping("/{id}/update-password")
     @JsonView(UserUpdateDto.PasswordUpdateView.class)
     public ResponseEntity<?> changeUserPasswordById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto passwordUserDto){
@@ -106,7 +109,7 @@ public class UserController {
             .build(), HttpStatus.CREATED
         );
     }
-
+    
     @PutMapping("/{id}/update-name")
     @JsonView(UserUpdateDto.NameUpdateView.class)
     public ResponseEntity<?> changeUserNameById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto nameUserDto){
@@ -117,9 +120,9 @@ public class UserController {
             .status(HttpStatus.CREATED.value())
             .objectResponse(updateUser)
             .build(), HttpStatus.CREATED
-        );
-    }
-
+            );
+        }
+        
     @PutMapping("/{id}/update-lastname")
     @JsonView(UserUpdateDto.LastnameUpdateView.class)
     public ResponseEntity<?> changeUserLastnameById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto lastnameUserDto){
@@ -132,7 +135,7 @@ public class UserController {
             .build(), HttpStatus.CREATED
         );
     }
-
+    
     @PutMapping("/{id}/update-username")
     @JsonView(UserUpdateDto.UsernameUpdateView.class)
     public ResponseEntity<?> changeUserUsernameById(@PathVariable Long id, @RequestBody @Valid UserUpdateDto usernameUserDto){
@@ -196,8 +199,10 @@ public class UserController {
             .objectResponse(updateEmailUser)
             .build(), HttpStatus.CREATED
         );
-    }
+     }
 
+    
+    // Endpoints de tipo DELETE
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<?> deleteUserById(@PathVariable Long id){
         userService.deleteUserById(id);
@@ -210,4 +215,18 @@ public class UserController {
         );
     }
 
+    // Endpoint para administrador
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<?> showUserAdminById(@PathVariable Long id) {
+        UserReturnDto user = userService.showUserAdminById(id);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("User successfully obtained.")
+            .status(HttpStatus.OK.value())
+            .objectResponse(user)
+            .build(), HttpStatus.OK
+        );
+    }
+
 }
+

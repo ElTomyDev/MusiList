@@ -84,4 +84,19 @@ public class UserReturnDto{
                .idUser(user.getIdUser())
                .email(user.getEmail()).build();
     }
+
+    public static UserReturnDto toAllDataDto(User user){
+        return UserReturnDto.builder()
+               .idUser(user.getIdUser())
+               .role(user.getRole())
+               .name(user.getName())
+               .lastname(user.getLastname())
+               .username(user.getUsername())
+               .description(user.getDescription())
+               .email(user.getEmail())
+               .status(user.getStatus())
+               .password(user.getPassword())
+               .lastConnection(user.getLastConnection())
+               .createDate(user.getCreateDate()).build();
+    }
 }

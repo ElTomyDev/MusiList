@@ -2,13 +2,13 @@ package com.heavydelay.service;
 
 import java.util.List;
 
-import com.heavydelay.model.dto.role.CreateRoleDto;
-import com.heavydelay.model.dto.role.PublicRoleDto;
+import com.heavydelay.model.dto.role.RoleUpdateDto;
+import com.heavydelay.model.dto.role.RoleReturnDto;
 
 public interface IRole {
-    List<PublicRoleDto> showAllRoles();
-    PublicRoleDto showRoleById(Integer id);
-    PublicRoleDto addNewRole(CreateRoleDto newRole);
+    List<RoleReturnDto> showAllRoles();
+    RoleReturnDto showRoleById(Integer id);
+    RoleReturnDto addNewRole(RoleUpdateDto newRole);
     void deleteRoleById(Integer id);
-    PublicRoleDto changeRoleNameById(Integer id, CreateRoleDto newName);
+    RoleReturnDto changeRoleNameById(Integer id, RoleUpdateDto newName);
 }

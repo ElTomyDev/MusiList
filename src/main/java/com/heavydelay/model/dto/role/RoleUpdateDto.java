@@ -8,8 +8,8 @@ import lombok.ToString;
 @Data
 @ToString
 @Builder
-public class CreateRoleDto {
-
+public class RoleUpdateDto {
+    
     @NotBlank(message = "The role name must not be empty")
     private String roleName;
 

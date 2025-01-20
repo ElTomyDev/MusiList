@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.heavydelay.model.dto.role.CreateRoleDto;
-import com.heavydelay.model.dto.role.PublicRoleDto;
+import com.heavydelay.model.dto.role.RoleUpdateDto;
+import com.heavydelay.model.dto.role.RoleReturnDto;
 import com.heavydelay.model.payload.MessageResponse;
 import com.heavydelay.service.IRole;
 
@@ -33,8 +33,8 @@ public class RoleController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<?> addNewRole(@RequestBody @Valid CreateRoleDto newRole){
-        PublicRoleDto role = roleService.addNewRole(newRole);
+    public ResponseEntity<?> addNewRole(@RequestBody @Valid RoleUpdateDto newRole){
+        RoleReturnDto role = roleService.addNewRole(newRole);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("Role created successfully")
@@ -57,8 +57,8 @@ public class RoleController {
     }
 
     @PutMapping("{id}/update-name")
-    public ResponseEntity<?> changeRoleNameById(@PathVariable Integer id, @RequestBody @Valid CreateRoleDto newRoleName) {
-        PublicRoleDto role = roleService.changeRoleNameById(id, newRoleName);
+    public ResponseEntity<?> changeRoleNameById(@PathVariable Integer id, @RequestBody @Valid RoleUpdateDto newRoleName) {
+        RoleReturnDto role = roleService.changeRoleNameById(id, newRoleName);
         
         return new ResponseEntity<>(
             MessageResponse.builder()
@@ -71,7 +71,7 @@ public class RoleController {
 
     @GetMapping("/roles")
     public ResponseEntity<?> showAllRoles() {
-        List<PublicRoleDto> roles = roleService.showAllRoles();
+        List<RoleReturnDto> roles = roleService.showAllRoles();
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("All roles obtained correctly")
@@ -83,7 +83,7 @@ public class RoleController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> showRoleById(@PathVariable Integer id) {
-        PublicRoleDto role = roleService.showRoleById(id);
+        RoleReturnDto role = roleService.showRoleById(id);
         return new ResponseEntity<>(
             MessageResponse.builder()
             .message("Role successfully obtained")
