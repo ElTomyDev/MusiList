@@ -1,12 +1,14 @@
 package com.heavydelay.service;
 
+import java.util.List;
+
 import com.heavydelay.model.dto.band.BandReturnDto;
 import com.heavydelay.model.dto.band.BandUpdateDto;
 
 public interface IBand {
-    public BandReturnDto showAllBands(boolean detailed);
+    public List<BandReturnDto> showAllBands(boolean detailed);
     public BandReturnDto showBandById(Long id, boolean detailed);
-    public BandReturnDto showBandByBandName(boolean detailed);
+    public BandReturnDto showBandByBandName(String bandName, boolean detailed);
 
     public void deteleBandById(Long id);
 
