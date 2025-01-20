@@ -14,7 +14,7 @@ public class AccessCodeGenerator {
             throw new IllegalArgumentException("The code length must be greater than 1 and less than 6");
         }
 
-        StringBuilder code = new StringBuilder(longitud);
+        StringBuilder code = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
             int index = random.nextInt(CHARACTERS.length());
             code.append(CHARACTERS.charAt(index));
