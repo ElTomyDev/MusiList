@@ -64,7 +64,7 @@ public class GenderController {
             .build(), HttpStatus.CREATED
         );
     }
-
+ 
     @GetMapping("/genders")
     public ResponseEntity<?> showAllGenders() {
         List<GenderReturnDto> gender = genderService.showAllGenders();
