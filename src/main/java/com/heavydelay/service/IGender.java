@@ -8,7 +8,7 @@ import com.heavydelay.model.dto.gender.GenderUpdateDto;
 public interface IGender {
     List<GenderReturnDto> showAllGenders();
     GenderReturnDto showGenderById(Integer id);
-    GenderReturnDto addNewGender(GenderUpdateDto newRole);
+    GenderReturnDto addNewGender(GenderUpdateDto newGender);
     void deleteGenderById(Integer id);
     GenderReturnDto changeGenderNameById(Integer id, GenderUpdateDto newName);
 }
