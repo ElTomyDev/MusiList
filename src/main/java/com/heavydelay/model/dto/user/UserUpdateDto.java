@@ -37,7 +37,6 @@ public class UserUpdateDto {
     @NotBlank(groups =  {AllValuesUpdateView.class, RoleUpdateView.class}, message = "The 'role name' cannot be empty")
     private String roleName;
 
-    
     @JsonView({AllValuesUpdateView.class, RegisterUserView.class, LastnameUpdateView.class})
     @NotBlank(groups =  {AllValuesUpdateView.class, RegisterUserView.class, LastnameUpdateView.class}, message = "The 'lastname' cannot be empty")
     @Size(groups =  {AllValuesUpdateView.class, RegisterUserView.class, LastnameUpdateView.class}, min = 2, max = 50, message = "The 'lastname' must be between 2 and 50 characters long")
