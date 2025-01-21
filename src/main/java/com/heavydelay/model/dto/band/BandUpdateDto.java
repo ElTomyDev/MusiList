@@ -26,7 +26,7 @@ public class BandUpdateDto {
     
     @JsonView({ChangeAccessCode.class, ChangeAllValues.class})
     @NotBlank(groups = ChangeAccessCode.class, message = "'Access code' cannot be empty")
-    @Size(groups = ChangeAccessCode.class, max = 20, message = "The 'access code' cannot exceed 20 characters.")
+    @Size(groups = ChangeAccessCode.class, max = 6, message = "The 'access code' cannot exceed 6 characters.")
     private String accessCode;
     
 }

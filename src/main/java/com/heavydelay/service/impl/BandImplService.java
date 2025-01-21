@@ -25,26 +25,60 @@ public class BandImplService implements IBand{
 
     @Override
     public BandReturnDto changeAccessCodeById(Long id, BandUpdateDto dto) {
-        // TODO Auto-generated method stub
-        return null;
+        Band band = bandRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The band with ID '" + id + "' not found")
+        );
+
+        band.setAccessCode(dto.getAccessCode());
+
+        bandRepository.save(band);
+        return BandReturnDto.toDetailedDto(band);
     }
 
     @Override
     public BandReturnDto changeAllBandValuesById(Long id, BandUpdateDto dto) {
-        // TODO Auto-generated method stub
-        return null;
+        Band band = bandRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The band with ID '" + id + "' not found")
+        );
+
+        band.setBandName(dto.getBandName());
+        band.setGender(genderRepository.findByGenderName(
+            dto.getBandName()).orElseThrow(
+                () -> new ResourceNotFoundException("The gender with name '" + dto.getGenderName() + "' not found")
+            )
+        );
+        band.setAccessCode(dto.getAccessCode());
+        
+        bandRepository.save(band);
+        return BandReturnDto.toDetailedDto(band);
     }
 
     @Override
     public BandReturnDto changeBandGenderById(Long id, BandUpdateDto dto) {
-        // TODO Auto-generated method stub
-        return null;
+        Band band = bandRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The band with ID '" + id + "' not found")
+        );
+
+        band.setGender(genderRepository.findByGenderName(
+            dto.getBandName()).orElseThrow(
+                () -> new ResourceNotFoundException("The gender with name '" + dto.getGenderName() + "' not found")
+            )
+        );
+
+        bandRepository.save(band);
+        return BandReturnDto.toDetailedDto(band);
     }
 
     @Override
     public BandReturnDto changeBandNameById(Long id, BandUpdateDto dto) {
-        // TODO Auto-generated method stub
-        return null;
+        Band band = bandRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The band with ID '" + id + "' not found")
+        );
+
+        band.setBandName(dto.getBandName());
+
+        bandRepository.save(band);
+        return BandReturnDto.toDetailedDto(band);
     }
 
     @Override
@@ -101,4 +135,11 @@ public class BandImplService implements IBand{
         return detailed ? BandReturnDto.toDetailedDto(band) : BandReturnDto.toBasicDto(band);
     }
 
+    @Override
+    public BandReturnDto showBandAccessCodeById(Long id) {
+        Band band = bandRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("The band with ID '" + id + "' not found")
+        );
+        return BandReturnDto.AccessCode(band);
+    }
 }
