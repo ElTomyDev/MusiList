@@ -3,6 +3,8 @@ package com.heavydelay.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import com.heavydelay.exception.ResourceNotFoundException;
 import com.heavydelay.model.dto.gender.GenderReturnDto;
 import com.heavydelay.model.dto.gender.GenderUpdateDto;
@@ -10,6 +12,7 @@ import com.heavydelay.model.entity.Gender;
 import com.heavydelay.repository.GenderRepository;
 import com.heavydelay.service.IGender;
 
+@Service
 public class GenderImplService implements IGender{
 
     private GenderRepository genderRepository;

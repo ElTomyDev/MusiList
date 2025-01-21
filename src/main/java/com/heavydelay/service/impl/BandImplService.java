@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import com.heavydelay.exception.ResourceNotFoundException;
 import com.heavydelay.model.dto.band.BandReturnDto;
 import com.heavydelay.model.dto.band.BandUpdateDto;
@@ -13,6 +15,7 @@ import com.heavydelay.repository.GenderRepository;
 import com.heavydelay.service.IBand;
 import com.heavydelay.util.AccessCodeGenerator;
 
+@Service
 public class BandImplService implements IBand{
 
     private BandRepository bandRepository;
@@ -136,10 +139,10 @@ public class BandImplService implements IBand{
     }
 
     @Override
-    public BandReturnDto showBandAccessCodeById(Long id) {
+    public String showBandAccessCodeById(Long id) {
         Band band = bandRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("The band with ID '" + id + "' not found")
         );
-        return BandReturnDto.AccessCode(band);
+        return band.getAccessCode();
     }
 }

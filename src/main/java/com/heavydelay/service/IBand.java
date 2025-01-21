@@ -9,7 +9,7 @@ public interface IBand {
     public List<BandReturnDto> showAllBands(boolean detailed);
     public BandReturnDto showBandById(Long id, boolean detailed);
     public BandReturnDto showBandByBandName(String bandName, boolean detailed);
-    public BandReturnDto showBandAccessCodeById(Long id);
+    public String showBandAccessCodeById(Long id);
 
     public void deteleBandById(Long id);
 
