@@ -1,5 +1,6 @@
 package com.heavydelay.model.dto.role;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.heavydelay.model.entity.Roles;
 
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RoleReturnDto {
     private Integer idRole;
     private String roleName;

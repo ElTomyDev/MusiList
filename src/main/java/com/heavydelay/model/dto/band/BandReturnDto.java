@@ -2,6 +2,7 @@ package com.heavydelay.model.dto.band;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.heavydelay.model.entity.Band;
 import com.heavydelay.model.entity.Gender;
 
@@ -12,6 +13,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BandReturnDto {
 
     private Long idBand;

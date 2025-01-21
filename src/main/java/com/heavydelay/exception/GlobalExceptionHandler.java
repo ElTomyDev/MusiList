@@ -20,6 +20,19 @@ import com.heavydelay.model.payload.ErrorResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException ex, WebRequest request) {
+        return new ResponseEntity<>(
+            ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .status(HttpStatus.BAD_REQUEST.value())
+            .error("Conflict in route definition. Please check the routes in the controller.")
+            .message("routes cannot be identified: " + ex.getMessage())
+            .path(request.getDescription(false))
+            .build(), HttpStatus.BAD_REQUEST
+        );
+    }
+
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErrorResponse> handleTypeMismatch(MissingServletRequestParameterException ex, WebRequest request){
         return new ResponseEntity<>(

@@ -42,7 +42,7 @@ public class BandController {
         );
     }
 
-    @GetMapping("/{id}/{detailed}")
+    @GetMapping("/show-id/{id}/{detailed}")
     public ResponseEntity<?> showBandById(@PathVariable Long id, @PathVariable boolean detailed) {
         BandReturnDto band = bandService.showBandById(id, detailed);
         return new ResponseEntity<>(
@@ -54,7 +54,7 @@ public class BandController {
         );
     }
     
-    @GetMapping("/{bandName}/{detailed}")
+    @GetMapping("/show-name/{bandName}/{detailed}")
     public ResponseEntity<?> showBandByBandName(@PathVariable String bandName, @PathVariable boolean detailed) {
         BandReturnDto band = bandService.showBandByBandName(bandName, detailed);
         return new ResponseEntity<>(
