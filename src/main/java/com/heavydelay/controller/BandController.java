@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -99,6 +100,58 @@ public class BandController {
             .message("Band created successfully")
             .status(HttpStatus.CREATED.value())
             .objectResponse(newBand)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}/update-values")
+    @JsonView(BandUpdateDto.ChangeAllValuesView.class)
+    public ResponseEntity<?> changeAllBandValuesById(@PathVariable Long id, @RequestBody @Valid BandUpdateDto dto) {
+        BandReturnDto savedBand = bandService.changeAllBandValuesById(id, dto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("Values updated successfully")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(savedBand)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}/update-accescode")
+    @JsonView(BandUpdateDto.ChangeAccessCodeView.class)
+    public ResponseEntity<?> changeAccessCodeById(@PathVariable Long id, @RequestBody @Valid BandUpdateDto dto) {
+        BandReturnDto savedBand = bandService.changeAccessCodeById(id, dto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("Access code updated successfully")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(savedBand)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}/update-bandname")
+    @JsonView(BandUpdateDto.ChangeBandNameView.class)
+    public ResponseEntity<?> changeBandNameById(@PathVariable Long id, @RequestBody @Valid BandUpdateDto dto) {
+        BandReturnDto savedBand = bandService.changeBandNameById(id, dto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("Band name updated successfully")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(savedBand)
+            .build(), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/{id}/update-gender")
+    @JsonView(BandUpdateDto.ChangeGenderNameView.class)
+    public ResponseEntity<?> changeBandGenderById(@PathVariable Long id, @RequestBody @Valid BandUpdateDto dto) {
+        BandReturnDto savedBand = bandService.changeBandGenderById(id, dto);
+        return new ResponseEntity<>(
+            MessageResponse.builder()
+            .message("Gender updated successfully")
+            .status(HttpStatus.CREATED.value())
+            .objectResponse(savedBand)
             .build(), HttpStatus.CREATED
         );
     }
