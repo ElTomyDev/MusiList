@@ -1,8 +1,6 @@
 package com.heavydelay.model.dto.musician;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.heavydelay.model.entity.Band;
-import com.heavydelay.model.entity.User;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
