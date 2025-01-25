@@ -1,10 +1,12 @@
 package com.heavydelay.service;
 
+import java.util.List;
+
 import com.heavydelay.model.dto.musician.MusicianReturnDto;
 import com.heavydelay.model.dto.musician.MusicianUpdateDto;
 
 public interface IMusician {
-    public MusicianReturnDto showAllMusicians(boolean detailed);
+    public List<MusicianReturnDto> showAllMusicians(boolean detailed);
     public MusicianReturnDto showMusicianById(Long id, boolean detailed);
     
     public MusicianReturnDto createNewMusician(MusicianUpdateDto dto);

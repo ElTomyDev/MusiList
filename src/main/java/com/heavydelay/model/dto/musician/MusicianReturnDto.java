@@ -33,7 +33,7 @@ public class MusicianReturnDto {
 
     private LocalDateTime joinDate;
 
-    public MusicianReturnDto toBasicDto(Musician musician){
+    public static MusicianReturnDto toBasicDto(Musician musician){
         return MusicianReturnDto.builder()
                .idMusician(musician.getIdMusician())
                .username(musician.getUser().getUsername())
@@ -43,7 +43,7 @@ public class MusicianReturnDto {
                .joinDate(musician.getJoinDate()).build();
     }
 
-    public MusicianReturnDto toDetailedDto(Musician musician){
+    public static MusicianReturnDto toDetailedDto(Musician musician){
         return MusicianReturnDto.builder()
                .idMusician(musician.getIdMusician())
                .user(musician.getUser())
